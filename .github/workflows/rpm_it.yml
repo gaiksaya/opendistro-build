@@ -11,7 +11,7 @@ jobs:
     name: Test ISM Plugin
     runs-on: ubuntu-latest
     container: amazonlinux
-      privileged: true
+      options: ----privileged
     steps:
       - uses: actions/checkout@v1
       - uses: actions/checkout@v1
