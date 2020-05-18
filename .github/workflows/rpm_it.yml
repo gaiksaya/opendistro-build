@@ -1,0 +1,45 @@
+name: IT for RPM
+
+on:
+#   schedule:
+#     - cron: '0 10 * * *'
+  repository_dispatch:
+    types: [build-it]
+  
+jobs:
+  Test-ISM-Plugin:
+    name: Test ISM Plugin
+    runs-on: ubuntu-latest
+    container: amazonlinux
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/checkout@v1
+        with:
+          repository: opendistro-for-elasticsearch/index-management
+          ref: master
+      - name: Setup Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: 13
+      - name: Running test
+        run: |
+        cd elasticsearch/linux_distributions
+        es_version=`../bin/version-info --es`
+        echo $es_version
+        cd ../../..
+        sleep 20
+        sudo curl https://d3g5vo6xdbdb9a.cloudfront.net/yum/opendistroforelasticsearch-artifacts.repo -o /etc/yum.repos.d/opendistroforelasticsearch-artifacts.repo
+        sudo yum install java-11-openjdk-devel
+        sudo yum install wget unzip
+        sudo yum install opendistroforelasticsearch-1.7.0
+        sudo chmod 777 /etc/elasticsearch/elasticsearch.yml
+        sudo /usr/share/elasticsearch/bin/elasticsearch-plugin remove opendistro_security
+        sudo sed -i /^opendistro_security/d /etc/elasticsearch/elasticsearch.yml
+        sudo sed -i /CN=kirk/d /etc/elasticsearch/elasticsearch.yml
+        sudo sed -i /^node.max_local_storage_nodes/d /etc/elasticsearch/elasticsearch.yml
+        sudo sed -i /^cluster.routing.allocation.disk.threshold_enabled/d /etc/elasticsearch/elasticsearch.yml
+
+        sudo systemctl start elasticsearch.service
+        sleep 30
+        cd index-management   
+        ./gradlew integTest -Dtests.rest.cluster=localhost:9200 -Dtests.cluster=localhost:9200
