@@ -21,7 +21,7 @@ jobs:
         run: |
           curl https://d3g5vo6xdbdb9a.cloudfront.net/yum/opendistroforelasticsearch-artifacts.repo -o /etc/yum.repos.d/opendistroforelasticsearch-artifacts.repo
           yum install java-1.8.0-openjdk-devel -y
-          yum install wget unzip
+          yum install wget unzip -y
           yum install opendistroforelasticsearch-1.7.0 -y
           chmod 777 /etc/elasticsearch/elasticsearch.yml
           /usr/share/elasticsearch/bin/elasticsearch-plugin remove opendistro_security
