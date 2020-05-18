@@ -21,6 +21,7 @@ jobs:
           ref: master
       - name: Running test
         run: |
+          /usr/sbin/init
           curl https://d3g5vo6xdbdb9a.cloudfront.net/yum/opendistroforelasticsearch-artifacts.repo -o /etc/yum.repos.d/opendistroforelasticsearch-artifacts.repo
           yum install java-1.8.0-openjdk-devel -y
           yum install wget unzip -y
