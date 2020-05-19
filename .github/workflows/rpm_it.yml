@@ -29,5 +29,6 @@ jobs:
           yum install java-1.8.0-openjdk-devel -y
           echo $JAVA_HOME
           lol=`whereis java`
+          whereis java
           export JAVA_HOME=$lol
 
