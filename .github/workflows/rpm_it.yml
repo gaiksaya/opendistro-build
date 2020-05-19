@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     container: 
       image: amazonlinux
-      options: "-it --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro /usr/sbin/init"
+      options: "-it --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro"
     steps:
       - uses: actions/checkout@v1
 
@@ -25,5 +25,6 @@ jobs:
       - name: Running test
         run: |
           yum install systemd -y
+          exec /usr/sbin/init
           systemctl status
 
