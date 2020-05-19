@@ -22,6 +22,7 @@ jobs:
       - name: Running test
         run: |
           cat /etc/os-release
+          rpm -qa | grep -i systemd
           systemctl start httpd.service
           curl https://d3g5vo6xdbdb9a.cloudfront.net/yum/opendistroforelasticsearch-artifacts.repo -o /etc/yum.repos.d/opendistroforelasticsearch-artifacts.repo
           yum install java-1.8.0-openjdk-devel -y
