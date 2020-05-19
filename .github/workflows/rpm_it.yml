@@ -26,8 +26,8 @@ jobs:
         run: |
           yum install systemd -y
           curl https://d3g5vo6xdbdb9a.cloudfront.net/yum/opendistroforelasticsearch-artifacts.repo -o /etc/yum.repos.d/opendistroforelasticsearch-artifacts.repo
-          yum install java-1.8.0-openjdk-devel -y
-          export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk
+          sudo amazon-linux-extras install java-openjdk11 -y
+          export JAVA_HOME=/usr/lib/jvm/java-11*/bin
           echo $JAVA_HOME
           yum install wget unzip -y
           yum install opendistroforelasticsearch-1.7.0 -y
