@@ -22,11 +22,6 @@ jobs:
           repository: opendistro-for-elasticsearch/index-management
           ref: master
 
-      - name: Setup Java
-        uses: actions/setup-java@v1
-        with:
-          java-version: 13
-
       - name: Running test
         run: |
           yum install systemd -y
