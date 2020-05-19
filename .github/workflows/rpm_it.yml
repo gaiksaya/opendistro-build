@@ -24,7 +24,6 @@ jobs:
 
       - name: Running test
         run: |
-          /usr/sbin/init
           yum install systemd -y
           curl https://d3g5vo6xdbdb9a.cloudfront.net/yum/opendistroforelasticsearch-artifacts.repo -o /etc/yum.repos.d/opendistroforelasticsearch-artifacts.repo
           cd /opt
