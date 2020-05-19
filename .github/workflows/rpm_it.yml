@@ -11,7 +11,7 @@ jobs:
     name: Test ISM Plugin
     runs-on: ubuntu-latest
     container: 
-      image: amazonlinux-latest
+      image: amazonlinux:2
       options: "-it --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro --entrypoint /usr/sbin/init"
     steps:
       - uses: actions/checkout@v1
