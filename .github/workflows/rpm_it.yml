@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     container: 
       image: centos/systemd
-      options: "-it --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro -p 80:80 -d  httpd"
+      options: "-it --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro --entrypoint /usr/sbin/init"
     steps:
       - uses: actions/checkout@v1
       - uses: actions/checkout@v1
@@ -21,7 +21,7 @@ jobs:
           ref: master
       - name: Running test
         run: |
-          systemctl start httpd.service
+          sudo systemctl start httpd.service
           curl https://d3g5vo6xdbdb9a.cloudfront.net/yum/opendistroforelasticsearch-artifacts.repo -o /etc/yum.repos.d/opendistroforelasticsearch-artifacts.repo
           yum install java-1.8.0-openjdk-devel -y
           yum install wget unzip -y
