@@ -15,7 +15,9 @@ jobs:
       options: "-it --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro --entrypoint /usr/sbin/init"
     steps:
       - uses: actions/checkout@v1
-      - uses: actions/checkout@v1
+
+      - name: Checking out ISM repo
+        uses: actions/checkout@v1
         with:
           repository: opendistro-for-elasticsearch/index-management
           ref: master
@@ -34,9 +36,8 @@ jobs:
           sed -i /^node.max_local_storage_nodes/d /etc/elasticsearch/elasticsearch.yml
           sed -i /^cluster.routing.allocation.disk.threshold_enabled/d /etc/elasticsearch/elasticsearch.yml
           sleep 30
+          echo "#########"
           ls -l
-          pwd
-          cd $HOME
-          ls -l
+          echo "#########"
           cd index-management   
           ./gradlew integTest -Dtests.rest.cluster=localhost:9200 -Dtests.cluster=localhost:9200
