@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     container: 
       image: amazonlinux
-      options: "-it --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro --entrypoint /usr/sbin/init"
+      options: "-it --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro /usr/sbin/init"
     steps:
       - uses: actions/checkout@v1
 
