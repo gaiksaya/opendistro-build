@@ -27,17 +27,7 @@ jobs:
           yum install systemd -y
           curl https://d3g5vo6xdbdb9a.cloudfront.net/yum/opendistroforelasticsearch-artifacts.repo -o /etc/yum.repos.d/opendistroforelasticsearch-artifacts.repo
           yum install java-1.8.0-openjdk-devel -y
-          export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.252.b09-2.amzn2.0.1.x86_64/jre/bin/java
-          echo $JAVA_HOME
-          yum install wget unzip -y
-          yum install opendistroforelasticsearch-1.7.0 -y
-          chmod 777 /etc/elasticsearch/elasticsearch.yml
-          /usr/share/elasticsearch/bin/elasticsearch-plugin remove opendistro_security
-          sed -i /^opendistro_security/d /etc/elasticsearch/elasticsearch.yml
-          sed -i /CN=kirk/d /etc/elasticsearch/elasticsearch.yml
-          sed -i /^node.max_local_storage_nodes/d /etc/elasticsearch/elasticsearch.yml
-          sed -i /^cluster.routing.allocation.disk.threshold_enabled/d /etc/elasticsearch/elasticsearch.yml
-          sleep 30
-          cd ../index-management   
-          ./gradlew integTest -Dtests.rest.cluster=localhost:9200 -Dtests.cluster=localhost:9200
+          cd /usr/lib/jvm/
+          ls -l
+
 
