@@ -27,6 +27,9 @@ jobs:
           yum install systemd -y
           curl https://d3g5vo6xdbdb9a.cloudfront.net/yum/opendistroforelasticsearch-artifacts.repo -o /etc/yum.repos.d/opendistroforelasticsearch-artifacts.repo
           amazon-linux-extras install java-openjdk11 -y
+          echo"##############"
+          pwd
+          echo"################"
           cd /usr/lib/jvm/java-11*
           path=`pwd`
           export JAVA_HOME=$path
