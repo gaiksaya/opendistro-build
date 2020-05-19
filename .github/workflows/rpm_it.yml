@@ -41,7 +41,6 @@ jobs:
           sed -i /^cluster.routing.allocation.disk.threshold_enabled/d /etc/elasticsearch/elasticsearch.yml
           sleep 30
           pwd
-          cd ../../../../index-management   
+          cd ../../../..   
           pwd
-          ./gradlew integTest -Dtests.rest.cluster=localhost:9200 -Dtests.cluster=localhost:9200
 
