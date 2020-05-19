@@ -11,7 +11,7 @@ jobs:
     name: Test ISM Plugin
     runs-on: ubuntu-latest
     container: 
-      image: amazonlinux
+      image: sayaligaikawad/centosctl
       options: "-it --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro"
     steps:
       - uses: actions/checkout@v1
@@ -24,9 +24,6 @@ jobs:
 
       - name: Running test
         run: |
-          #!/bin/bash
           yum install systemd -y
-          yum install -y autofs
-          /usr/bin/systemsctl restart autofs &
-          exec /usr/sbin/init
+
 
