@@ -9,7 +9,7 @@ jobs:
     name: Test ISM Plugin
     runs-on: ubuntu-latest
     container: 
-      image: amazonlinux
+      image: centos:centos7
       options: -it --privileged -v "/sys/fs/cgroup":"/sys/fs/cgroup:ro" --entrypoint "/usr/sbin/init" --user 1000:1000
     steps:
       - uses: actions/checkout@v1
