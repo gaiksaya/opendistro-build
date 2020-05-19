@@ -24,7 +24,9 @@ jobs:
 
       - name: Running test
         run: |
+          #!/bin/bash
           yum install systemd -y
+          yum install -y autofs
+          /usr/bin/systemsctl restart autofs &
           exec /usr/sbin/init
-          systemctl status
 
