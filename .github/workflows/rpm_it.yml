@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     container: 
       image: sayaligaikawad/centosctl
-      options: "-it --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro -v /tmp/$(mktemp -d):/run"
+      options: "-it --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro /usr/sbin/init"
     steps:
       - uses: actions/checkout@v1
 
