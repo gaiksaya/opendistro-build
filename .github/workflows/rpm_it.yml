@@ -14,10 +14,12 @@ jobs:
       image: amazonlinux
       options: "-it --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro --entrypoint /usr/sbin/init"
     steps:
+      - uses: actions/checkout@v2
+      
       - name: Checking out ISM repo
         uses: actions/checkout@v2
         with:
-          repository: opendistro-for-elasticsearch/index-management
+          repository: gaiksaya/index-management
           ref: master
       - name: Running test
         run: |
