@@ -27,7 +27,7 @@ jobs:
           yum install systemd -y
           curl https://d3g5vo6xdbdb9a.cloudfront.net/yum/opendistroforelasticsearch-artifacts.repo -o /etc/yum.repos.d/opendistroforelasticsearch-artifacts.repo
           cd /opt
-          yum install wget
+          yum install wget -y
           wget https://download.java.net/java/GA/jdk13/5b8a42f3905b406298b72d750b6919f6/33/GPL/openjdk-13_linux-x64_bin.tar.gz
           tar -xvf openjdk-13_linux-x64_bin.tar.gz
           export JAVA_HOME=/opt/jdk-13/
