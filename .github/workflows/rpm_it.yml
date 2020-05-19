@@ -19,12 +19,16 @@ jobs:
       - name: Checking out ISM repo
         uses: actions/checkout@v1
         with:
-          repository: gaiksaya/index-management 
+          repository: opendistro-for-elasticsearch/index-management
           ref: master
-          
+
+      - name: Setup Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ matrix.java }}
+
       - name: Running test
         run: |
-          yum update -y
           yum install systemd -y
           curl https://d3g5vo6xdbdb9a.cloudfront.net/yum/opendistroforelasticsearch-artifacts.repo -o /etc/yum.repos.d/opendistroforelasticsearch-artifacts.repo
           yum install java-1.8.0-openjdk-devel -y
@@ -40,5 +44,7 @@ jobs:
           echo "#########"
           ls -l
           echo "#########"
-          cd index-management   
-          ./gradlew integTest -Dtests.rest.cluster=localhost:9200 -Dtests.cluster=localhost:9200
+          cd ..
+          pwd
+          echo "$$$$$"
+          ls -l
