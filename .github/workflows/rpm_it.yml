@@ -25,5 +25,6 @@ jobs:
       - name: Running test
         run: |
           yum install systemd -y
+          systemctl status
 
 
