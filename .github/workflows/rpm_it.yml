@@ -9,10 +9,10 @@ on:
 jobs:
   Test-ISM-Plugin:
     name: Test ISM Plugin
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     container: 
       image: sayaligaikawad/centosctl
-      options: "-it --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro"
+      options: "-it --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro -v /tmp/$(mktemp -d):/run"
     steps:
       - uses: actions/checkout@v1
 
