@@ -11,7 +11,7 @@ jobs:
     name: Test ISM Plugin
     runs-on: ubuntu-latest
     container: 
-      image: amazonlinux
+      image: centos:centos7
       options: "-it --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro"
     steps:
       - uses: actions/checkout@v1
