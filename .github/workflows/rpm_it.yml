@@ -22,6 +22,7 @@ jobs:
 
       - name: Running test
         run: |
+          set -m
           curl https://d3g5vo6xdbdb9a.cloudfront.net/yum/opendistroforelasticsearch-artifacts.repo -o /etc/yum.repos.d/opendistroforelasticsearch-artifacts.repo
           cd /opt
           yum install wget tar -y
