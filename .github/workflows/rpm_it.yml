@@ -9,7 +9,7 @@ on:
 jobs:
   Test-ISM-Plugin:
     name: Test ISM Plugin
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     container: 
       image: sayaligaikawad/centosctl
       options: "-it --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro"
