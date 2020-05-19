@@ -40,6 +40,6 @@ jobs:
           sed -i /^node.max_local_storage_nodes/d /etc/elasticsearch/elasticsearch.yml
           sed -i /^cluster.routing.allocation.disk.threshold_enabled/d /etc/elasticsearch/elasticsearch.yml
           sleep 30
-          cd $GITHUB_WORKSPACE/index-management
+          cd $GITHUB_WORKSPACE/../index-management
           ./gradlew integTest -Dtests.rest.cluster=localhost:9200 -Dtests.cluster=localhost:9200
 
