@@ -52,7 +52,7 @@ jobs:
 
       - name: IT for alerting
         run: |
-        sudo systemctl status elasticsearch.service
-        cd $GITHUB_WORKSPACE/alerting
-        ./gradlew integTest -Dtests.rest.cluster=localhost:9200 -Dtests.cluster=localhost:9200
+          sudo systemctl status elasticsearch.service
+          cd $GITHUB_WORKSPACE/../alerting
+          ./gradlew integTest -Dtests.rest.cluster=localhost:9200 -Dtests.cluster=localhost:9200
 
