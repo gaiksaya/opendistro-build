@@ -21,7 +21,7 @@ jobs:
         run: |
           sudo curl https://d3g5vo6xdbdb9a.cloudfront.net/yum/opendistroforelasticsearch-artifacts.repo -o /etc/yum.repos.d/opendistroforelasticsearch-artifacts.repo
           cd /opt
-          sudo yum install wget tar -y
+          sudo yum install wget -y
           sudo wget https://download.java.net/java/GA/jdk13/5b8a42f3905b406298b72d750b6919f6/33/GPL/openjdk-13_linux-x64_bin.tar.gz
           sudo tar -xvf openjdk-13_linux-x64_bin.tar.gz
           export JAVA_HOME=/opt/jdk-13/
@@ -52,8 +52,6 @@ jobs:
 
       - name: IT for alerting
         run: |
-          sudo wget https://download.java.net/java/GA/jdk13/5b8a42f3905b406298b72d750b6919f6/33/GPL/openjdk-13_linux-x64_bin.tar.gz
-          sudo tar -xvf openjdk-13_linux-x64_bin.tar.gz
           export JAVA_HOME=/opt/jdk-13/
           export PATH=$PATH:/opt/jdk-13/bin
           cd $GITHUB_WORKSPACE/../alerting
@@ -76,8 +74,6 @@ jobs:
       
       - name: IT for SQL
         run: |
-          sudo wget https://download.java.net/java/GA/jdk13/5b8a42f3905b406298b72d750b6919f6/33/GPL/openjdk-13_linux-x64_bin.tar.gz
-          sudo tar -xvf openjdk-13_linux-x64_bin.tar.gz
           export JAVA_HOME=/opt/jdk-13/
           export PATH=$PATH:/opt/jdk-13/bin
           cd $GITHUB_WORKSPACE/../sql
@@ -97,8 +93,6 @@ jobs:
           
       - name: IT for KNN
         run: |
-          sudo wget https://download.java.net/java/GA/jdk13/5b8a42f3905b406298b72d750b6919f6/33/GPL/openjdk-13_linux-x64_bin.tar.gz
-          sudo tar -xvf openjdk-13_linux-x64_bin.tar.gz
           export JAVA_HOME=/opt/jdk-13/
           export PATH=$PATH:/opt/jdk-13/bin
           cd $GITHUB_WORKSPACE/../k-NN
