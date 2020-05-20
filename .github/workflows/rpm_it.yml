@@ -17,7 +17,7 @@ jobs:
           repository: opendistro-for-elasticsearch/index-management
           ref: opendistro-1.7
 
-      - name: Running test
+      - name: IT for ISM
         run: |
           sudo curl https://d3g5vo6xdbdb9a.cloudfront.net/yum/opendistroforelasticsearch-artifacts.repo -o /etc/yum.repos.d/opendistroforelasticsearch-artifacts.repo
           cd /opt
@@ -37,5 +37,22 @@ jobs:
           sleep 30
           cd $GITHUB_WORKSPACE/../index-management
           ./gradlew integTest -Dtests.rest.cluster=localhost:9200 -Dtests.cluster=localhost:9200
+  
+  Test-Alerting-Plugin:
+    name: Test Alerting Plugin
+    runs: [self-hosted, Linux, X64]
+    steps:
+      - uses: actions/checkout@v1
 
+      - name: Checking out Alerting repo
+        uses: actions/checkout@v1
+        with:
+          repository: opendistro-for-elasticsearch/alerting
+          ref: opendistro-1.7
+
+      - name: IT for alerting
+        run: |
+        sudo systemctl status elasticsearch.service
+        cd $GITHUB_WORKSPACE/alerting
+        ./gradlew integTest -Dtests.rest.cluster=localhost:9200 -Dtests.cluster=localhost:9200
 
