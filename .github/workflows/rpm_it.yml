@@ -34,7 +34,7 @@ jobs:
           sudo sed -i /CN=kirk/d /etc/elasticsearch/elasticsearch.yml
           sudo sed -i /^node.max_local_storage_nodes/d /etc/elasticsearch/elasticsearch.yml
           sudo sed -i /^cluster.routing.allocation.disk.threshold_enabled/d /etc/elasticsearch/elasticsearch.yml
-          systemctl start elasticsearch.service
+          sudo systemctl start elasticsearch.service
           sleep 30
           cd $GITHUB_WORKSPACE/../index-management
           ./gradlew integTest -Dtests.rest.cluster=localhost:9200 -Dtests.cluster=localhost:9200
