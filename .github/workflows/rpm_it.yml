@@ -7,10 +7,7 @@ on:
 jobs:
   Test-ISM-Plugin:
     name: Test ISM Plugin
-    runs-on: ubuntu-latest
-    container: 
-      image: centos:centos7
-      options: -it --privileged -v "/sys/fs/cgroup":"/sys/fs/cgroup:ro" --entrypoint "/usr/sbin/init"
+    runs-on: [self-hosted, linux, ARM64]
     steps:
       - uses: actions/checkout@v1
 
@@ -37,8 +34,7 @@ jobs:
           sed -i /CN=kirk/d /etc/elasticsearch/elasticsearch.yml
           sed -i /^node.max_local_storage_nodes/d /etc/elasticsearch/elasticsearch.yml
           sed -i /^cluster.routing.allocation.disk.threshold_enabled/d /etc/elasticsearch/elasticsearch.yml
-          chroot --userspec=elasticsearch / "${@}"
-          /usr/share/elasticsearch/bin/elasticsearch
+          systemctl start elasticsearch.service
           sleep 30
           cd $GITHUB_WORKSPACE/../index-management
           ./gradlew integTest -Dtests.rest.cluster=localhost:9200 -Dtests.cluster=localhost:9200
