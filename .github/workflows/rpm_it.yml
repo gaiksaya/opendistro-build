@@ -9,7 +9,7 @@ jobs:
     name: Test ISM Plugin
     runs-on: ubuntu-latest
     container: 
-      image: centos:centos7
+      image: amazonlinux
       options: -it --privileged -v "/sys/fs/cgroup":"/sys/fs/cgroup:ro" --entrypoint "/usr/sbin/init"
     steps:
       - uses: actions/checkout@v1
@@ -39,7 +39,7 @@ jobs:
           sed -i /CN=kirk/d /etc/elasticsearch/elasticsearch.yml
           sed -i /^node.max_local_storage_nodes/d /etc/elasticsearch/elasticsearch.yml
           sed -i /^cluster.routing.allocation.disk.threshold_enabled/d /etc/elasticsearch/elasticsearch.yml
-          su -c chroot --userspec=elasticsearch / "${@}"
+          chroot --userspec=elasticsearch / "${@}"
           /usr/share/elasticsearch/bin/elasticsearch
           sleep 30
           cd $GITHUB_WORKSPACE/../index-management
