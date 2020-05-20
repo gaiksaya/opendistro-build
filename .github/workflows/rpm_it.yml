@@ -40,7 +40,7 @@ jobs:
   
   Test-Alerting-Plugin:
     name: Test Alerting Plugin
-    runs: [self-hosted, Linux, X64]
+    runs-on: [self-hosted, Linux, X64]
     steps:
       - uses: actions/checkout@v1
 
