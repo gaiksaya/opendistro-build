@@ -19,21 +19,21 @@ jobs:
 
       - name: Running test
         run: |
-          curl https://d3g5vo6xdbdb9a.cloudfront.net/yum/opendistroforelasticsearch-artifacts.repo -o /etc/yum.repos.d/opendistroforelasticsearch-artifacts.repo
+          sudo curl https://d3g5vo6xdbdb9a.cloudfront.net/yum/opendistroforelasticsearch-artifacts.repo -o /etc/yum.repos.d/opendistroforelasticsearch-artifacts.repo
           cd /opt
-          yum install wget tar -y
-          wget https://download.java.net/java/GA/jdk13/5b8a42f3905b406298b72d750b6919f6/33/GPL/openjdk-13_linux-x64_bin.tar.gz
+          sudo yum install wget tar -y
+          sudo wget https://download.java.net/java/GA/jdk13/5b8a42f3905b406298b72d750b6919f6/33/GPL/openjdk-13_linux-x64_bin.tar.gz
           tar -xvf openjdk-13_linux-x64_bin.tar.gz
           export JAVA_HOME=/opt/jdk-13/
           export PATH=$PATH:/opt/jdk-13/bin
-          yum install unzip -y
-          yum install opendistroforelasticsearch-1.7.0 -y
-          chmod 777 /etc/elasticsearch/elasticsearch.yml
-          /usr/share/elasticsearch/bin/elasticsearch-plugin remove opendistro_security
-          sed -i /^opendistro_security/d /etc/elasticsearch/elasticsearch.yml
-          sed -i /CN=kirk/d /etc/elasticsearch/elasticsearch.yml
-          sed -i /^node.max_local_storage_nodes/d /etc/elasticsearch/elasticsearch.yml
-          sed -i /^cluster.routing.allocation.disk.threshold_enabled/d /etc/elasticsearch/elasticsearch.yml
+          sudo yum install unzip -y
+          sudo yum install opendistroforelasticsearch-1.7.0 -y
+          sudo chmod 777 /etc/elasticsearch/elasticsearch.yml
+          sudo /usr/share/elasticsearch/bin/elasticsearch-plugin remove opendistro_security
+          sudo sed -i /^opendistro_security/d /etc/elasticsearch/elasticsearch.yml
+          sudo sed -i /CN=kirk/d /etc/elasticsearch/elasticsearch.yml
+          sudo sed -i /^node.max_local_storage_nodes/d /etc/elasticsearch/elasticsearch.yml
+          sudo sed -i /^cluster.routing.allocation.disk.threshold_enabled/d /etc/elasticsearch/elasticsearch.yml
           systemctl start elasticsearch.service
           sleep 30
           cd $GITHUB_WORKSPACE/../index-management
