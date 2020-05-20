@@ -5,7 +5,7 @@ on:
     types: [build-it]
   
 jobs:
-  Test-ISM-Plugin:
+  Test-All-Plugins:
     name: Test ISM Plugin
     runs-on: [self-hosted, Linux, X64]
     steps:
@@ -37,12 +37,6 @@ jobs:
           sleep 30
           cd $GITHUB_WORKSPACE/../index-management
           ./gradlew integTest -Dtests.rest.cluster=localhost:9200 -Dtests.cluster=localhost:9200
-  
-  Test-Alerting-Plugin:
-    name: Test Alerting Plugin
-    runs-on: [self-hosted, Linux, X64]
-    steps:
-      - uses: actions/checkout@v1
 
       - name: Checking out Alerting repo
         uses: actions/checkout@v1
@@ -56,17 +50,8 @@ jobs:
           export PATH=$PATH:/opt/jdk-13/bin
           cd $GITHUB_WORKSPACE/../alerting
           ./gradlew integTest -Dtests.rest.cluster=localhost:9200 -Dtests.cluster=localhost:9200
-      
-          
-          
-          
-  Test-SQL-Plugin:
-    name: Test SQL Plugin
-    runs-on: [self-hosted, Linux, X64]
-    steps:
-      - uses: actions/checkout@v1
 
-      - name: Checking out Alerting repo
+      - name: Checking out SQL repo
         uses: actions/checkout@v1
         with:
           repository: opendistro-for-elasticsearch/sql
@@ -78,14 +63,8 @@ jobs:
           export PATH=$PATH:/opt/jdk-13/bin
           cd $GITHUB_WORKSPACE/../sql
           ./gradlew integTest -Dtests.rest.cluster=localhost:9200 -Dtests.cluster=localhost:9200
-    
-  Test-KNN-Plugin:
-    name: Test K-NN plugin
-    runs-on: [self-hosted, Linux, X64]
-    steps:
-      - uses: actions/checkout@v1
 
-      - name: Checking out Alerting repo
+      - name: Checking out k-NN repo
         uses: actions/checkout@v1
         with:
           repository: opendistro-for-elasticsearch/k-NN
