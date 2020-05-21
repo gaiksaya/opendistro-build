@@ -40,12 +40,14 @@ jobs:
           ./gradlew integTest -Dtests.rest.cluster=localhost:9200 -Dtests.cluster=localhost:9200
 
       - name: Checking out Alerting repo
+        if: always()
         uses: actions/checkout@v1
         with:
           repository: opendistro-for-elasticsearch/alerting
           ref: opendistro-1.7
 
       - name: IT for alerting
+        if: always()
         run: |
           export JAVA_HOME=/opt/jdk-13/
           export PATH=$PATH:/opt/jdk-13/bin
@@ -53,12 +55,14 @@ jobs:
           ./gradlew integTest -Dtests.rest.cluster=localhost:9200 -Dtests.cluster=localhost:9200
 
       - name: Checking out SQL repo
+        if: always()
         uses: actions/checkout@v1
         with:
           repository: opendistro-for-elasticsearch/sql
           ref: opendistro-1.7
       
       - name: IT for SQL
+        if: always()
         run: |
           export JAVA_HOME=/opt/jdk-13/
           export PATH=$PATH:/opt/jdk-13/bin
@@ -66,12 +70,14 @@ jobs:
           ./gradlew integTest -Dtests.rest.cluster=localhost:9200 -Dtests.cluster=localhost:9200
 
       - name: Checking out k-NN repo
+        if: always()
         uses: actions/checkout@v1
         with:
           repository: opendistro-for-elasticsearch/k-NN
           ref: opendistro-1.7    
           
       - name: IT for KNN
+        if: always()
         run: |
           export JAVA_HOME=/opt/jdk-13/
           export PATH=$PATH:/opt/jdk-13/bin
