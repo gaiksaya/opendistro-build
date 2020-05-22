@@ -40,34 +40,34 @@ jobs:
     needs: [Start-ES-Service]
     runs-on: [self-hosted, Linux, X64, amazon]
     steps:
-      - name: Checking out ISM repo
-        uses: actions/checkout@v1
-        with:
-          repository: opendistro-for-elasticsearch/index-management
-          ref: opendistro-1.7
+      # - name: Checking out ISM repo
+      #   uses: actions/checkout@v1
+      #   with:
+      #     repository: opendistro-for-elasticsearch/index-management
+      #     ref: opendistro-1.7
   
-      - name: IT for ISM
-        if: always()
-        run: |
-          export JAVA_HOME=/opt/jdk-13/
-          export PATH=$PATH:/opt/jdk-13/bin
-          cd $GITHUB_WORKSPACE/../index-management
-          ./gradlew integTest -Dtests.rest.cluster=localhost:9200 -Dtests.cluster=localhost:9200
+      # - name: IT for ISM
+      #   if: always()
+      #   run: |
+      #     export JAVA_HOME=/opt/jdk-13/
+      #     export PATH=$PATH:/opt/jdk-13/bin
+      #     cd $GITHUB_WORKSPACE/../index-management
+      #     ./gradlew integTest -Dtests.rest.cluster=localhost:9200 -Dtests.cluster=localhost:9200
 
-      - name: Checking out Alerting repo
-        if: always()
-        uses: actions/checkout@v1
-        with:
-          repository: opendistro-for-elasticsearch/alerting
-          ref: opendistro-1.7
+      # - name: Checking out Alerting repo
+      #   if: always()
+      #   uses: actions/checkout@v1
+      #   with:
+      #     repository: opendistro-for-elasticsearch/alerting
+      #     ref: opendistro-1.7
 
-      - name: IT for alerting
-        if: always()
-        run: |
-          export JAVA_HOME=/opt/jdk-13/
-          export PATH=$PATH:/opt/jdk-13/bin
-          cd $GITHUB_WORKSPACE/../alerting
-          ./gradlew integTest -Dtests.rest.cluster=localhost:9200 -Dtests.cluster=localhost:9200
+      # - name: IT for alerting
+      #   if: always()
+      #   run: |
+      #     export JAVA_HOME=/opt/jdk-13/
+      #     export PATH=$PATH:/opt/jdk-13/bin
+      #     cd $GITHUB_WORKSPACE/../alerting
+      #     ./gradlew integTest -Dtests.rest.cluster=localhost:9200 -Dtests.cluster=localhost:9200
 
       - name: Checking out SQL repo
         if: always()
