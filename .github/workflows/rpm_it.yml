@@ -5,19 +5,18 @@ on:
     types: [build-it]
   
 jobs:
-  Test-All-Plugins:
+  Start-ES-Service:
     name: Test ISM Plugin
     runs-on: [self-hosted, Linux, X64, amazon]
     steps:
       - uses: actions/checkout@v1
 
-      - name: Checking out ISM repo
-        uses: actions/checkout@v1
+      - name: Setup Java
+        uses: actions/setup-java@v1
         with:
-          repository: opendistro-for-elasticsearch/index-management
-          ref: opendistro-1.7
+          java-version: 14
 
-      - name: IT for ISM
+      - name: Starting ES service
         run: |
           sudo curl https://d3g5vo6xdbdb9a.cloudfront.net/yum/opendistroforelasticsearch-artifacts.repo -o /etc/yum.repos.d/opendistroforelasticsearch-artifacts.repo
           cd /opt
@@ -36,6 +35,20 @@ jobs:
           sudo sed -i /^cluster.routing.allocation.disk.threshold_enabled/d /etc/elasticsearch/elasticsearch.yml
           sudo systemctl start elasticsearch.service
           sleep 30
+    
+  Test-All-Plugins:
+    needs: [Start-ES-Service]
+    runs-on: [self-hosted, Linux, X64, amazon]
+    steps:
+      - name: Checking out ISM repo
+        uses: actions/checkout@v1
+        with:
+          repository: opendistro-for-elasticsearch/index-management
+          ref: opendistro-1.7
+  
+      - name: IT for ISM
+        if: always()
+        run: |
           cd $GITHUB_WORKSPACE/../index-management
           ./gradlew integTest -Dtests.rest.cluster=localhost:9200 -Dtests.cluster=localhost:9200
 
@@ -82,6 +95,31 @@ jobs:
           export JAVA_HOME=/opt/jdk-13/
           export PATH=$PATH:/opt/jdk-13/bin
           cd $GITHUB_WORKSPACE/../k-NN
-          ./gradlew integTest -Dtests.rest.cluster=localhost:9200 -Dtests.cluster=localhost:9200  
+          ./gradlew integTest -Dtests.rest.cluster=localhost:9200 -Dtests.cluster=localhost:9200 
+  
+  Cleaning-Host:
+    needs: [Test-All-Plugins]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configuring AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-west-2
+
+      - name: Resetting the host runner
+        run: |
+          instanceid=`aws ec2 describe-instances --filters "Name=tag:Name,Values=odfeRpm" | grep InstanceId | cut -d ':' -f 2 | sed 's/[",]//g'`
+          volumeid=`aws ec2 describe-instances --filters "Name=tag:Name,Values=odfe" | grep VolumeId | cut -d ':' -f 2 | sed 's/"//g'`
+          az=`aws ec2 describe-instances --filters "Name=tag:Name,Values=odfe" | grep AvailabilityZone | cut -d ':' -f 2 | sed 's/[",]//g'`
+          aws ec2 stop-instances --instance-ids $instanceid
+          aws ec2 create-volume --snapshot snap-016e25334fa537e59 --availability-zone $az
+          aws ec2 detach-volume --volume-id $volumeid
+          aws ec2 delete-volume --volume-id $volumeid
+          aws ec2 attach-volume --device /dev/xvda --instance-id $instanceid --volume-id $volumeid
+          aws ec2 start-instances --instance-id $instanceid
+          echo "Your Host Runner is as new now! Happy Rerunning the workflow"
+
 
 
