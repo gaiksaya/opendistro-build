@@ -114,6 +114,8 @@ jobs:
 
       - name: Resetting the host runner
         run: |
+          #!/bin/bash
+          
           instanceid=`aws ec2 describe-instances --filters "Name=tag:Name,Values=odfeRpm" | grep InstanceId | cut -d ':' -f 2 | sed 's/[",]//g'`
           echo $instanceid
           volumeid=`aws ec2 describe-instances --filters "Name=tag:Name,Values=odfeRpm" | grep VolumeId | cut -d ':' -f 2 | sed 's/[",]//g'`
@@ -124,7 +126,7 @@ jobs:
           sleep 60
           aws ec2 detach-volume --volume-id $volumeid
           if [[ `echo $?` -ne 0 ]]; then
-          sleep 30
+          sleep 60
           aws ec2 detach-volume --volume-id $volumeid
           fi
           aws ec2 delete-volume --volume-id $volumeid
