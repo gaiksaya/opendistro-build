@@ -14,7 +14,7 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v1
         with:
-          java-version: 14
+          java-version: 13
 
       - name: Starting ES service
         run: |
@@ -49,6 +49,8 @@ jobs:
       - name: IT for ISM
         if: always()
         run: |
+          export JAVA_HOME=/opt/jdk-13/
+          export PATH=$PATH:/opt/jdk-13/bin
           cd $GITHUB_WORKSPACE/../index-management
           ./gradlew integTest -Dtests.rest.cluster=localhost:9200 -Dtests.cluster=localhost:9200
 
@@ -99,6 +101,7 @@ jobs:
   
   Cleaning-Host:
     needs: [Test-All-Plugins]
+    if: always()
     runs-on: ubuntu-latest
     steps:
       - name: Configuring AWS Credentials
