@@ -114,9 +114,13 @@ jobs:
       - name: Resetting the host runner
         run: |
           instanceid=`aws ec2 describe-instances --filters "Name=tag:Name,Values=odfeRpm" | grep InstanceId | cut -d ':' -f 2 | sed 's/[",]//g'`
+          echo $instanceid
           volumeid=`aws ec2 describe-instances --filters "Name=tag:Name,Values=odfeRpm" | grep VolumeId | cut -d ':' -f 2 | sed 's/"//g'`
+          echo $volumeid
           az=`aws ec2 describe-instances --filters "Name=tag:Name,Values=odfeRpm" | grep AvailabilityZone | cut -d ':' -f 2 | sed 's/[",]//g'`
+          echo $az
           aws ec2 stop-instances --instance-ids $instanceid
+          sleep 60
           aws ec2 detach-volume --volume-id $volumeid
           aws ec2 delete-volume --volume-id $volumeid
           aws ec2 create-volume --snapshot snap-016e25334fa537e59 --availability-zone $az --tag-specifications 'ResourceType=volume,Tags=[{Key=Name,Value=odfe}]'
