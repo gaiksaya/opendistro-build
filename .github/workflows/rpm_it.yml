@@ -55,7 +55,7 @@ jobs:
       #     export JAVA_HOME=/opt/jdk-13/
       #     export PATH=$PATH:/opt/jdk-13/bin
       #     cd $GITHUB_WORKSPACE/../index-management
-      #     ./gradlew integTest -Dtests.rest.cluster=localhost:9200 -Dtests.cluster=localhost:9200
+      #     ./gradlew integTest -Dtests.rest.cluster=localhost:9200 -Dtests.cluster=localhost:9200 -Dtests.clustername=es-integrationtest
 
       - name: Checking out Alerting repo
         if: always()
@@ -69,7 +69,7 @@ jobs:
         run: |
           export PATH=$PATH:/opt/jdk-13/bin
           cd $GITHUB_WORKSPACE/../alerting
-          ./gradlew integTest -Dtests.rest.cluster=localhost:9200 -Dtests.cluster=localhost:9200
+          ./gradlew integTest -Dtests.rest.cluster=localhost:9200 -Dtests.cluster=localhost:9200 -Dtests.clustername=es-integrationtest
 
       # - name: Checking out SQL repo
       #   if: always()
@@ -84,7 +84,7 @@ jobs:
       #     export JAVA_HOME=/opt/jdk-13/
       #     export PATH=$PATH:/opt/jdk-13/bin
       #     cd $GITHUB_WORKSPACE/../sql
-      #     ./gradlew integTest -Dtests.rest.cluster=localhost:9200 -Dtests.cluster=localhost:9200
+      #     ./gradlew integTest -Dtests.rest.cluster=localhost:9200 -Dtests.cluster=localhost:9200 -Dtests.clustername=es-integrationtest
 
       # - name: Checking out k-NN repo
       #   if: always()
@@ -98,7 +98,7 @@ jobs:
       #   run: |
       #     export PATH=$PATH:$JAVA_HOME
       #     cd $GITHUB_WORKSPACE/../k-NN
-      #     ./gradlew integTest -Dtests.rest.cluster=localhost:9200 -Dtests.cluster=localhost:9200 
+      #     ./gradlew integTest -Dtests.rest.cluster=localhost:9200 -Dtests.cluster=localhost:9200 -Dtests.clustername=es-integrationtest
   
   Cleaning-Host:
     needs: [Test-All-Plugins]
@@ -115,7 +115,7 @@ jobs:
       - name: Resetting the host runner
         run: |
           #!/bin/bash
-          
+
           instanceid=`aws ec2 describe-instances --filters "Name=tag:Name,Values=odfeRpm" | grep InstanceId | cut -d ':' -f 2 | sed 's/[",]//g'`
           echo $instanceid
           volumeid=`aws ec2 describe-instances --filters "Name=tag:Name,Values=odfeRpm" | grep VolumeId | cut -d ':' -f 2 | sed 's/[",]//g'`
