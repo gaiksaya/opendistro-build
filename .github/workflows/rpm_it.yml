@@ -22,7 +22,6 @@ jobs:
           sudo curl https://d3g5vo6xdbdb9a.cloudfront.net/yum/opendistroforelasticsearch-artifacts.repo -o /etc/yum.repos.d/opendistroforelasticsearch-artifacts.repo
           cd /opt
           sudo yum install wget -y
-          export JAVA_HOME=/opt/jdk-13/
           export PATH=$PATH:$JAVA_HOME
           sudo yum install unzip -y
           sudo yum install opendistroforelasticsearch-1.7.0 -y
@@ -39,6 +38,11 @@ jobs:
     needs: [Start-ES-Service]
     runs-on: [self-hosted, Linux, X64, amazon]
     steps:
+      - name: Setup Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: 13
+
       # - name: Checking out ISM repo
       #   uses: actions/checkout@v1
       #   with:
@@ -93,6 +97,7 @@ jobs:
       - name: IT for KNN
         if: always()
         run: |
+          export PATH=$PATH:$JAVA_HOME
           cd $GITHUB_WORKSPACE/../k-NN
           ./gradlew integTest -Dtests.rest.cluster=localhost:9200 -Dtests.cluster=localhost:9200 
   
@@ -119,6 +124,10 @@ jobs:
           aws ec2 stop-instances --instance-ids $instanceid
           sleep 60
           aws ec2 detach-volume --volume-id $volumeid
+          if [[ `echo $?` -ne 0 ]]; then
+          sleep 30
+          aws ec2 detach-volume --volume-id $volumeid
+          fi
           aws ec2 delete-volume --volume-id $volumeid
           aws ec2 create-volume --snapshot snap-016e25334fa537e59 --availability-zone $az --tag-specifications 'ResourceType=volume,Tags=[{Key=Name,Value=odfe}]'
           sleep 30
