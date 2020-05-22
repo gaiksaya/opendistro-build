@@ -14,7 +14,7 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v1
         with:
-          java-version: 13
+          java-version: 14
 
       - name: Starting ES service
         run: |
@@ -41,7 +41,7 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v1
         with:
-          java-version: 13
+          java-version: 14
 
       # - name: Checking out ISM repo
       #   uses: actions/checkout@v1
@@ -67,7 +67,6 @@ jobs:
       - name: IT for alerting
         if: always()
         run: |
-          export JAVA_HOME=/opt/jdk-13/
           export PATH=$PATH:/opt/jdk-13/bin
           cd $GITHUB_WORKSPACE/../alerting
           ./gradlew integTest -Dtests.rest.cluster=localhost:9200 -Dtests.cluster=localhost:9200
