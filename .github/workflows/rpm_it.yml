@@ -115,7 +115,7 @@ jobs:
         run: |
           instanceid=`aws ec2 describe-instances --filters "Name=tag:Name,Values=odfeRpm" | grep InstanceId | cut -d ':' -f 2 | sed 's/[",]//g'`
           echo $instanceid
-          volumeid=`aws ec2 describe-instances --filters "Name=tag:Name,Values=odfeRpm" | grep VolumeId | cut -d ':' -f 2 | sed 's/"//g'`
+          volumeid=`aws ec2 describe-instances --filters "Name=tag:Name,Values=odfeRpm" | grep VolumeId | cut -d ':' -f 2 | sed 's/[",]//g'`
           echo $volumeid
           az=`aws ec2 describe-instances --filters "Name=tag:Name,Values=odfeRpm" | grep AvailabilityZone | cut -d ':' -f 2 | sed 's/[",]//g'`
           echo $az
