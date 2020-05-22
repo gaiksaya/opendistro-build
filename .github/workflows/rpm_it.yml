@@ -117,10 +117,11 @@ jobs:
           volumeid=`aws ec2 describe-instances --filters "Name=tag:Name,Values=odfe" | grep VolumeId | cut -d ':' -f 2 | sed 's/"//g'`
           az=`aws ec2 describe-instances --filters "Name=tag:Name,Values=odfe" | grep AvailabilityZone | cut -d ':' -f 2 | sed 's/[",]//g'`
           aws ec2 stop-instances --instance-ids $instanceid
-          aws ec2 create-volume --snapshot snap-016e25334fa537e59 --availability-zone $az
+          aws ec2 create-volume --snapshot snap-016e25334fa537e59 --availability-zone $az --tag-specifications 'ResourceType=volume,Tags=[{Key=Name,Value=odfe}]'
+          newVolumeId=`aws ec2 describe-volumes --filters "Name=tag:Name,Values=odfe" | grep VolumeId | cut -d ':' -f 2 | sed 's/[",]//g'`
           aws ec2 detach-volume --volume-id $volumeid
           aws ec2 delete-volume --volume-id $volumeid
-          aws ec2 attach-volume --device /dev/xvda --instance-id $instanceid --volume-id $volumeid
+          aws ec2 attach-volume --device /dev/xvda --instance-id $instanceid --volume-id $newVolumeId
           aws ec2 start-instances --instance-id $instanceid
           echo "Your Host Runner is as new now! Happy Rerunning the workflow"
 
