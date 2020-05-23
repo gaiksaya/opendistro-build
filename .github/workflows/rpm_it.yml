@@ -33,7 +33,7 @@ jobs:
           sudo yum install wget -y
           export PATH=$PATH:$JAVA_HOME
           sudo yum install unzip -y
-          sudo yum install opendistroforelasticsearch-{{env.od_version}} -y
+          sudo yum install opendistroforelasticsearch-${{env.od_version}} -y
           sudo chmod 777 /etc/elasticsearch/elasticsearch.yml    
           sudo /usr/share/elasticsearch/bin/elasticsearch-plugin remove opendistro_security 
           sudo sed -i /^opendistro_security/d /etc/elasticsearch/elasticsearch.yml
