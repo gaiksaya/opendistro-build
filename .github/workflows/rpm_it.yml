@@ -17,7 +17,7 @@ jobs:
           java-version: 14
       
       - name: Installing python
-        run: sudo yum install python36 -y
+        run: sudo yum install python37 -y
       
       - name: Getting OD version
         run: |
@@ -53,7 +53,7 @@ jobs:
           java-version: 14
     
       - name: Installing python
-        run: sudo yum install python36 -y
+        run: sudo yum install python37 -y
 
       - name: Getting OD Version
         run: |
