@@ -53,10 +53,12 @@ jobs:
         with:
           java-version: 14
     
-      - name: Getting OD version
+      - name: Setting up python
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
+
+      - name: Getting OD Version
         run: |
           cd elasticsearch/bin
           OD_VERSION=`./version-info --od`
