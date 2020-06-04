@@ -22,8 +22,10 @@ jobs:
 
       - name: Run Debian Staging Distrubution
         run: |
-          es_version=`./bin/version-info --es`
-          echo $es_versio
+          cd elasticsearch/linux_distributions
+          es_version=`../bin/version-info --es`
+          echo $es_version
+          cd ../../..
           sleep 20
           sudo sysctl -w vm.max_map_count=262144
           sudo apt update -y
@@ -48,6 +50,8 @@ jobs:
           sudo sed -i /^cluster.routing.allocation.disk.threshold_enabled/d /etc/elasticsearch/elasticsearch.yml
 
           sudo /etc/init.d/elasticsearch start
+          sudo systemctl status elasticsearch.service
+
           sleep 30
           cd index-management   
           ./gradlew integTest -Dtests.rest.cluster=localhost:9200 -Dtests.cluster=localhost:9200 -Dtests.clustername=es-integrationtest
