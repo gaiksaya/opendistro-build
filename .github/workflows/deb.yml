@@ -6,7 +6,6 @@ on:
 
 jobs:
   Test-ISM-Plugin:
-    needs: [sign-deb-artifacts]
     runs-on: [ubuntu-16.04]
     steps:
       - uses: actions/checkout@v1
