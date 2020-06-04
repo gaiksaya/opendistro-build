@@ -71,12 +71,12 @@ jobs:
           repository: opendistro-for-elasticsearch/index-management
           ref: ${{env.tag}}
   
-      # - name: IT for ISM
-      #   if: always()
-      #   run: |  
-      #     export PATH=$PATH:$JAVA_HOME
-      #     cd $GITHUB_WORKSPACE/../index-management
-      #     ./gradlew integTest -Dtests.rest.cluster=localhost:9200 -Dtests.cluster=localhost:9200 -Dtests.clustername=es-integrationtest
+      - name: IT for ISM
+        if: always()
+        run: |  
+          export PATH=$PATH:$JAVA_HOME
+          cd $GITHUB_WORKSPACE/../index-management
+          ./gradlew integTest -Dtests.rest.cluster=localhost:9200 -Dtests.cluster=localhost:9200 -Dtests.clustername=es-integrationtest
 
       # - name: Checking out Alerting repo
       #   if: always()
