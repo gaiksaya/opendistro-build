@@ -25,8 +25,7 @@ jobs:
           cd elasticsearch/linux_distributions
           es_version=`../bin/version-info --es`
           echo $es_version
-          cd $GITHUB_WORKSPACE
-          pwd
+          cd ../../..
           sleep 20
           sudo sysctl -w vm.max_map_count=262144
 
