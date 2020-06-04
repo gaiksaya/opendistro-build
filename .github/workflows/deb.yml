@@ -47,13 +47,14 @@ jobs:
           sudo chmod 777 repo
           sudo chmod 777 /etc/elasticsearch/elasticsearch.yml
           sudo /usr/share/elasticsearch/bin/elasticsearch-plugin remove opendistro_security
-          sudo sed -i '/path.logs/a path.repo: ["/$GITHUB_WORKSPACE/repo"]' /etc/elasticsearch/elasticsearch.yml
+          sudo sed -i '/path.logs/a path.repo: ["$GITHUB_WORKSPACE/repo"]' /etc/elasticsearch/elasticsearch.yml
           sudo sed -i /^opendistro_security/d /etc/elasticsearch/elasticsearch.yml
           sudo sed -i /CN=kirk/d /etc/elasticsearch/elasticsearch.yml
           sudo sed -i /^node.max_local_storage_nodes/d /etc/elasticsearch/elasticsearch.yml
           sudo sed -i /^cluster.routing.allocation.disk.threshold_enabled/d /etc/elasticsearch/elasticsearch.yml
 
           sudo /etc/init.d/elasticsearch start
+          sudo systemctl status elasticsearch.service
 
           sleep 30
           cd index-management   
