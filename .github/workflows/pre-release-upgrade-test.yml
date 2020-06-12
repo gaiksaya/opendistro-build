@@ -1,11 +1,6 @@
 name: Test version upgrades
 
 # Make sure to pass prev_es_version (previous ES version) and prev_od_version (previous OD version) in the dispatch payload
-# eg: {
-#   "event_type" : "pre-release-upgrade-test"
-#   "prev_es_version" : 7.7.0
-#   "prev_od_version": 1.8.0
-# }
 on: 
   repository_dispatch:
     types: [pre-release-upgrade-test]
@@ -62,6 +57,9 @@ jobs:
           uses: actions/setup-java@v1
           with:
             java-version: 14
+        
+        - name: Installing python
+          run: sudo yum install python37 -y
 
         - name: Install previous version of ODFE
           run: |
@@ -93,8 +91,8 @@ jobs:
         - name: Configuring AWS Credentials
           uses: aws-actions/configure-aws-credentials@v1
           with:
-            aws-access-key-id: ${{ secrets.AWS_EC2_ACCESS_KEY_ID }}
-            aws-secret-access-key: ${{ secrets.AWS_EC2_SECRET_ACCESS_KEY }}
+            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
             aws-region: us-west-2
   
         - name: Resetting the host runner
