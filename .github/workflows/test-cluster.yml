@@ -34,7 +34,6 @@ jobs:
             echo $distribution_type $security
 
             .github/scripts/userdata.sh "$distribution_type" "$security"
-            cd /tpm/
             ls -ltr
 
             # aws cloudformation create-stack --stack-name odfe-$distribution-type-security$security \
