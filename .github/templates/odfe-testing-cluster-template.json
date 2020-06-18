@@ -54,12 +54,13 @@
                           "", [
                             "ODFE-",
                             {
-                              "Ref": "distribution"
+                              "Ref": "distribution-"
                             },
+                            "security-",
                             {
                                 "Ref": "security"
                             },
-                            "Testing-Cluster"
+                            "-Testing-Cluster"
                           ]
                         ]
                       }, 
