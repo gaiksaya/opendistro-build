@@ -8,7 +8,7 @@ name: Create testing cluster
 
 on:
   repository_dispatch:
-    types: [test-build-rpm]
+    types: [test-cluster]
 
 jobs:
   Create-Cluster:
