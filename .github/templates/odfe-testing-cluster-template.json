@@ -18,7 +18,7 @@
         "security":{
             "Type": "String",
             "Default" : "ENABLE",
-            "AllowedValues" : ["ENABLE", "DISABLE"],
+            "AllowedValues" : [ "ENABLE", "DISABLE" ],
             "Description": "Security feature enabled"
         }
   
