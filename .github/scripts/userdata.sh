@@ -107,10 +107,10 @@ EOF
 fi
 
 #### Security disable feature ####
-if  [ ("$2" = "DISABLE") && ("$1" = "RPM") || ("$1" = "DEB") ]
+if  [ "$2" = "DISABLE" ] && [ "$1" = "RPM" ] || [ "$1" = "DEB" ]
 then
     sed -i '/echo \"network.host/a echo \"opendistro_security.disabled: true\" \>\> \/etc\/elasticsearch\/elasticsearch.yml' userdata_$1.sh
-elif ["$2" = "DISABLE"] && [ "$1" = "TAR" ]
+elif [ "$2" = "DISABLE" ] && [ "$1" = "TAR" ]
 then
     sed -i '/echo \"network.host/a echo \"opendistro_security.disabled: true\" \>\> config\/elasticsearch.yml' userdata_$1.sh
 fi

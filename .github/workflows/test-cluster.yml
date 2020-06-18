@@ -33,7 +33,7 @@ jobs:
             security= echo ${{github.event.client_payload.security}} | tr [:lower:] [:upper:]
             echo $distribution_type $security
 
-            .github/scripts/userdata.sh $distribution_type $security
+            .github/scripts/userdata.sh "$distribution_type" "$security"
             ls -ltr
 
             aws cloudformation create-stack --stack-name odfe_$distribution_type_security_$security \
