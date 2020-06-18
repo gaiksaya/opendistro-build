@@ -29,18 +29,19 @@ jobs:
             #!/bin/bash
             set -e
 
-            distribution_type= echo ${{github.event.client_payload.distribution}} | tr [:lower:] [:upper:]
-            security= echo ${{github.event.client_payload.security}} | tr [:lower:] [:upper:]
+            distribution_type=`echo ${{github.event.client_payload.distribution}} | tr [:lower:] [:upper:]`
+            security=`echo ${{github.event.client_payload.security}} | tr [:lower:] [:upper:]`
             echo $distribution_type $security
 
             .github/scripts/userdata.sh "$distribution_type" "$security"
-            ls -altr
+            cd /tpm/
+            ls -ltr
 
-            aws cloudformation create-stack --stack-name odfe-$distribution-type-security$security \
-            --template-body file://.github/templates/odfe-testing-cluster-template.json \
-            --parameters ParameterKey=userdata,ParameterValue=$(base64 -w0 /tmp/userdata_"$distribution_type".sh) \
-            ParameterKey=distribution,ParameterValue="$distribution_type" \
-            ParameterKey=security,ParameterValue="$security" \
-            --capabilities CAPABILITY_NAMED_IAM
+            # aws cloudformation create-stack --stack-name odfe-$distribution-type-security$security \
+            # --template-body file://.github/templates/odfe-testing-cluster-template.json \
+            # --parameters ParameterKey=userdata,ParameterValue=$(base64 -w0 /tmp/userdata_"$distribution_type".sh) \
+            # ParameterKey=distribution,ParameterValue="$distribution_type" \
+            # ParameterKey=security,ParameterValue="$security" \
+            # --capabilities CAPABILITY_NAMED_IAM
 
-            aws cloudformation wait stack-create-complete --stack-name odfe-$distribution_type-security$security
+            # aws cloudformation wait stack-create-complete --stack-name odfe-$distribution_type-security$security
