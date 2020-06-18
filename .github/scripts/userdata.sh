@@ -4,13 +4,14 @@ set -e
 REPO_ROOT=`git rev-parse --show-toplevel`
 ES_VER=`$REPO_ROOT/bin/version-info --es`
 ODFE_VER=`$REPO_ROOT/bin/version-info --od`
+echo $ES_VER $ODFE_VER
 
 if [ "$#" -eq 0 ] || [ "$#" -gt 2 ]
 then
     echo "Please assign at least 1 and at most 2 parameters when running this script"
-    echo "Example: $0 [\$DISTRIBUTION_TYPE] [\$SECURITY]"
+    echo "Example: $0 [\$DISTRIBUTION_TYPE] [\$ENABLE]"
     echo "Example: $0 \"RPM\""
-    echo "Example: $0 \"RPM\" \"SECURITY\""
+    echo "Example: $0 \"RPM\" \"ENABLE\""
     exit 1
 fi
 

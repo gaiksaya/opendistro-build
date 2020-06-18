@@ -2,7 +2,7 @@ name: Create testing cluster
 
 # Make sure to pass the distribution type and security (if needed) as parameters
 # { 
-#  "distribution_type": "RPM"
+#  "distribution_type": "RPM",
 #  "security": "enable" or "disable"
 # }
 
