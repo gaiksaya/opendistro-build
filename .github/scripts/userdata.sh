@@ -20,7 +20,7 @@ then
 ###### RPM package with Security enabled ######
 
 #installing ODFE
-cat <<- EOF > userdata_$1.sh 
+cat <<- EOF > /tpm/userdata_$1.sh 
 sudo -i
 sudo curl https://d3g5vo6xdbdb9a.cloudfront.net/yum/staging-opendistroforelasticsearch-artifacts.repo -o /etc/yum.repos.d/staging-opendistroforelasticsearch-artifacts.repo
 sudo yum install -y opendistroforelasticsearch-$ODFE_VER
@@ -47,7 +47,7 @@ fi
 if [ "$1" = "DEB" ]
 then 
 ###### DEB package with Security enabled ######
-cat <<- EOF > userdata_$1.sh
+cat <<- EOF > /tmp/userdata_$1.sh
 #installing ODFE
 sudo -i
 sudo sysctl -w vm.max_map_count=262144
@@ -80,7 +80,7 @@ fi
 if [ "$1" = "TAR" ]
 then 
 ###### TAR package with Security enabled ######
-cat <<- EOF > userdata_$1.sh
+cat <<- EOF > /tmp/userdata_$1.sh
 sudo sysctl -w vm.max_map_count=262144
 sudo apt-get install -y zip
 wget https://d3g5vo6xdbdb9a.cloudfront.net/downloads/tarball/opendistro-elasticsearch/opendistroforelasticsearch-$ODFE_VER.tar.gz
