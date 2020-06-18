@@ -1,0 +1,46 @@
+name: Create testing cluster
+
+# Make sure to pass the distribution type and security (if needed) as parameters
+# { 
+#  "distribution_type": "RPM"
+#  "security": "enable" or "disable"
+# }
+
+on:
+  repository_dispatch:
+    types: [test-build-rpm]
+
+jobs:
+  Create-Cluster:
+    name: Create Testing cluster
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.STACK_KEY }}
+          aws-secret-access-key: ${{ secrets.STACK_SECRET }}
+          aws-region: us-west-2
+
+      - name: Creating cluster
+        run: |
+            #!/bin/bash
+            set -e
+
+            distribution_type= echo ${{github.event.client_payload.distribution}} | tr [:lower:] [:upper:]
+            security= echo ${{github.event.client_payload.security}} | tr [:lower:] [:upper:]
+            echo $distribution_type $security
+
+            .github/scripts/userdata.sh $distribution_type $security
+            ls -ltr
+
+            aws cloudformation create-stack --stack-name odfe_$distribution_type_security_$security \
+            --template-body file://.github/templates/odfe-testing-cluster-template.json \
+            --parameters ParameterKey=userdata,ParameterValue=$(base64 -w0 userdata_$distribution_type.sh) \
+            ParameterKey=distribution,ParameterValue=$distribution_type \
+            ParameterKey=security,ParameterValue=$security \
+            --capabilities CAPABILITY_NAMED_IAM
+
+            aws cloudformation wait stack-create-complete --stack-name odfe_$distribution_type_security_$security
