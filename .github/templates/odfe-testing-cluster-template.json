@@ -54,9 +54,9 @@
                           "", [
                             "ODFE-",
                             {
-                              "Ref": "distribution-"
+                              "Ref": "distribution"
                             },
-                            "security-",
+                            "-security-",
                             {
                                 "Ref": "security"
                             },
