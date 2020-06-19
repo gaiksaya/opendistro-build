@@ -47,7 +47,12 @@
                 "MinSize" : "1",
                 "MaxSize" : "1",
                 "DesiredCapacity" : "1",
-                "TargetGroupARNs":[ {"Ref":"KibanaTargetGroup"}, {"Ref":"ESTargetGroup"}, {"Ref" : "ESSTargetGroup"} ],
+                "TargetGroupARNs": [{"Fn::If": [
+                    "CreateSecurityResources", 
+                        {"Ref" : "ESSTargetGroup"}, 
+                        {"Ref":"ESTargetGroup"}
+                        ]}, 
+                        {"Ref":"KibanaTargetGroup"}],
                 "Tags":[{
                     "Key" : "Name", 
                     "Value" : {
