@@ -33,12 +33,13 @@
       },
 
     "Conditions" : {
-        "CreateSecurityResources" : {"Fn::Equals" : [{"Ref" : "security"}, "ENABLE"]}
+        "CreateSecurityResources" : {"Fn::Equals" : [{"Ref" : "security"}, "ENABLE"]},
+        "CreateDisableSecurityResources" : {"Fn::Equals" : [{"Ref" : "security"}, "DISABLE"]}
       },
   
     "Resources": {
   
-        "myAutoScalingGroup" : {
+        "ODFE-ASG" : {
             "Type" : "AWS::AutoScaling::AutoScalingGroup",
             "Properties" : {
                 "AvailabilityZones" : [ "us-west-2a","us-west-2b","us-west-2c","us-west-2d"  ],
@@ -46,7 +47,7 @@
                 "MinSize" : "1",
                 "MaxSize" : "1",
                 "DesiredCapacity" : "1",
-                "TargetGroupARNs":[ {"Ref":"KibanaTargetGroup"}, {"Ref":"ESTargetGroup"} ],
+                "TargetGroupARNs":[ {"Ref":"KibanaTargetGroup"}, {"Ref":"ESTargetGroup"}, {"Ref" : "ESSTargetGroup"} ],
                 "Tags":[{
                     "Key" : "Name", 
                     "Value" : {
@@ -96,6 +97,7 @@
 
         "ESLoadBalancer" : {
             "Type" : "AWS::ElasticLoadBalancingV2::LoadBalancer",
+            "Condition" : "CreateDisableSecurityResources",
             "Properties" : {
             "Scheme" : "internet-facing",
             "SecurityGroups" : [ "sg-01fd2dab71e3ca62e" ],
@@ -106,6 +108,7 @@
 
         "ESListener" : {
             "Type" : "AWS::ElasticLoadBalancingV2::Listener",
+            "Condition" : "CreateDisableSecurityResources",
             "Properties" : {
                 "DefaultActions" : [{
                 "Type" : "forward",
@@ -119,6 +122,7 @@
 
         "ESTargetGroup" : {
             "Type" : "AWS::ElasticLoadBalancingV2::TargetGroup",
+            "Condition" : "CreateDisableSecurityResources",
             "Properties" : {
                 "HealthCheckEnabled" : "True",
                 "Port" : 9200,
@@ -130,11 +134,11 @@
         "KibanaLoadBalancer" : {
             "Type" : "AWS::ElasticLoadBalancingV2::LoadBalancer",
             "Properties" : {
-            "Scheme" : "internet-facing",
-            "SecurityGroups" : [ "sg-01fd2dab71e3ca62e" ],
-            "Subnets": ["subnet-c64a889b","subnet-63514d28","subnet-4bd52633","subnet-1411543f"],
-            "Type" : "application"
-            }
+                "Scheme" : "internet-facing",
+                "SecurityGroups" : [ "sg-01fd2dab71e3ca62e" ],
+                "Subnets": ["subnet-c64a889b","subnet-63514d28","subnet-4bd52633","subnet-1411543f"],
+                "Type" : "application"
+                }
         },
 
         "KibanaListener" : {
