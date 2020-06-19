@@ -36,11 +36,11 @@ jobs:
             .github/scripts/userdata.sh "$distribution_type" "$security"
             ls -ltr
 
-            aws cloudformation create-stack --stack-name odfe-$distribution_type-security-$security \
+            aws cloudformation create-stack --stack-name ODFE-$distribution_type-SECURITY-$security \
             --template-body file://.github/templates/odfe-testing-cluster-template.json \
             --parameters ParameterKey=userdata,ParameterValue=$(base64 -w0 userdata_$distribution_type.sh) \
             ParameterKey=distribution,ParameterValue=$distribution_type \
             ParameterKey=security,ParameterValue=$security \
             --capabilities CAPABILITY_NAMED_IAM
 
-            aws cloudformation wait stack-create-complete --stack-name odfe-$distribution_type-security-$security
+            aws cloudformation wait stack-create-complete --stack-name ODFE-$distribution_type-SECURITY-$security
