@@ -27,8 +27,8 @@ sudo curl https://d3g5vo6xdbdb9a.cloudfront.net/yum/staging-opendistroforelastic
 sudo yum install -y opendistroforelasticsearch-$ODFE_VER
 sudo sysctl -w vm.max_map_count=262144
 echo "node.name: init-master" >> /etc/elasticsearch/elasticsearch.yml
-echo "cluster.name: odfe-$ODFE_VER-rpm-security" >> /etc/elasticsearch/elasticsearch.yml
-echo "network.host: 0" >> /etc/elasticsearch/elasticsearch.yml
+echo "cluster.name: odfe-$ODFE_VER-rpm-auth" >> /etc/elasticsearch/elasticsearch.yml
+echo "network.host: 0.0.0.0" >> /etc/elasticsearch/elasticsearch.yml
 echo "cluster.initial_master_nodes: [\"init-master\"]" >> /etc/elasticsearch/elasticsearch.yml
 sed -i 's/-Xms1g/-Xms6g/' /etc/elasticsearch/jvm.options
 sed -i 's/-Xms1g/-Xms6g/' /etc/elasticsearch/jvm.options
@@ -63,8 +63,8 @@ sudo apt-get -y update
 sudo apt install -y opendistroforelasticsearch
 echo "node.name: init-master" >> /etc/elasticsearch/elasticsearch.yml
 echo "cluster.initial_master_nodes: [\"init-master\"]" >> /etc/elasticsearch/elasticsearch.yml
-echo "cluster.name: odfe-$ODFE_VER-deb-security" >> /etc/elasticsearch/elasticsearch.yml
-echo "network.host: 0" >> /etc/elasticsearch/elasticsearch.yml
+echo "cluster.name: odfe-$ODFE_VER-deb-auth" >> /etc/elasticsearch/elasticsearch.yml
+echo "network.host: 0.0.0.0" >> /etc/elasticsearch/elasticsearch.yml
 sed -i 's/-Xms1g/-Xms6g/' /etc/elasticsearch/jvm.options
 sed -i 's/-Xmx1g/-Xmx6g/' /etc/elasticsearch/jvm.options
 # Start the service
@@ -92,8 +92,8 @@ cd opendistroforelasticsearch-$ODFE_VER/
 
 echo "node.name: init-master" >> config/elasticsearch.yml
 echo "cluster.initial_master_nodes: [\"init-master\"]" >> config/elasticsearch.yml
-echo "cluster.name: odfe-$ODFE_VER-tarball-security" >> config/elasticsearch.yml
-echo "network.host: 0" >> config/elasticsearch.yml
+echo "cluster.name: odfe-$ODFE_VER-tarball-auth" >> config/elasticsearch.yml
+echo "network.host: 0.0.0.0" >> config/elasticsearch.yml
 sed -i 's/-Xms1g/-Xms6g/' config/jvm.options
 sed -i 's/-Xmx1g/-Xmx6g/' config/jvm.options
 
@@ -112,8 +112,10 @@ fi
 #### Security disable feature ####
 if  [ "$2" = "DISABLE" ] && [ "$1" = "RPM" ] || [ "$1" = "DEB" ]
 then
+    sed -i 's/^echo \"cluster.name.*/echo \"cluster.name \: odfe-$ODFE_VER-$1-noauth\" \>\> \/etc\/elasticsearch\/elasticsearch.yml/g' userdata_$1.sh
     sed -i '/echo \"network.host/a echo \"opendistro_security.disabled: true\" \>\> \/etc\/elasticsearch\/elasticsearch.yml' userdata_$1.sh
 elif [ "$2" = "DISABLE" ] && [ "$1" = "TAR" ]
 then
+    sed -i 's/^echo \"cluster.name.*/echo \"cluster.name \: odfe-$ODFE_VER-$1-noauth\" \>\> config\/elasticsearch.yml/g' userdata_$1.sh
     sed -i '/echo \"network.host/a echo \"opendistro_security.disabled: true\" \>\> config\/elasticsearch.yml' userdata_$1.sh
 fi
