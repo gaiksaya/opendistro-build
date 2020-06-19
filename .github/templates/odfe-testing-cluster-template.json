@@ -35,7 +35,7 @@
     "Conditions" : {
         "CreateSecurityResources" : {"Fn::Equals" : [{"Ref" : "security"}, "ENABLE"]},
         "CreateDisableSecurityResources" : {"Fn::Equals" : [{"Ref" : "security"}, "DISABLE"]}
-      },
+    },
   
     "Resources": {
   
@@ -70,22 +70,12 @@
                 }
             },
 
-        "odfeTestingClusterRole": {
-            "Type": "AWS::IAM::InstanceProfile",
-            "Properties": {
-                "Roles": ["odfe_testing_cluster_role"],
-                "InstanceProfileName": "odfe-testing-cluster-role"
-            }
-            },
-
         "asgLaunchConfig":{
               "Type": "AWS::AutoScaling::LaunchConfiguration",
               "Properties": {
                   "ImageId": { "Fn::FindInMap" : [ "DistributionMap", { "Ref" : "distribution" }, "amiId"]},
                   "InstanceType": "m5a.large",
-                  "IamInstanceProfile": {
-                      "Ref": "odfeTestingClusterRole"
-                  },
+                  "IamInstanceProfile": "odfe_testing_cluster_role",
                   "KeyName": "fedorakey",
                   "AssociatePublicIpAddress": true,
                   "SecurityGroups": ["sg-01fd2dab71e3ca62e"],
@@ -100,11 +90,11 @@
             "Type" : "AWS::ElasticLoadBalancingV2::LoadBalancer",
             "Condition" : "CreateDisableSecurityResources",
             "Properties" : {
-            "Scheme" : "internet-facing",
-            "SecurityGroups" : [ "sg-01fd2dab71e3ca62e" ],
-            "Subnets": ["subnet-c64a889b","subnet-63514d28","subnet-4bd52633","subnet-1411543f"],
-            "Type" : "application"
-            }
+                "Scheme" : "internet-facing",
+                "SecurityGroups" : [ "sg-01fd2dab71e3ca62e" ],
+                "Subnets": ["subnet-c64a889b","subnet-63514d28","subnet-4bd52633","subnet-1411543f"],
+                "Type" : "application"
+                }
         },
 
         "ESListener" : {
