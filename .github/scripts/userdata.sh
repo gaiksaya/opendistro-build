@@ -30,9 +30,6 @@ echo "node.name: init-master" >> /etc/elasticsearch/elasticsearch.yml
 echo "cluster.name: odfe-$ODFE_VER-rpm-auth" >> /etc/elasticsearch/elasticsearch.yml
 echo "network.host: 0.0.0.0" >> /etc/elasticsearch/elasticsearch.yml
 echo "cluster.initial_master_nodes: [\"init-master\"]" >> /etc/elasticsearch/elasticsearch.yml
-sed -i 's/-Xms1g/-Xms6g/' /etc/elasticsearch/jvm.options
-sed -i 's/-Xms1g/-Xms6g/' /etc/elasticsearch/jvm.options
-sed -i 's/-Xmx1g/-Xmx6g/' /etc/elasticsearch/jvm.options
 
 # Start the service
 sudo systemctl start elasticsearch.service
@@ -55,8 +52,9 @@ sudo -i
 sudo sysctl -w vm.max_map_count=262144
 sudo apt-get install -y zip
 wget -qO - https://d3g5vo6xdbdb9a.cloudfront.net/GPG-KEY-opendistroforelasticsearch | sudo apt-key add -
-echo "deb https://d3g5vo6xdbdb9a.cloudfront.net/staging/apt stable main" | sudo tee -a /etc/apt/sources.list.d/opendistroforelasticsearch.list
 
+#using public repo for testing as staging is broken
+echo "deb https://d3g5vo6xdbdb9a.cloudfront.net/apt stable main" | sudo tee -a   /etc/apt/sources.list.d/opendistroforelasticsearch.list
 wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-oss-$ES_VER-amd64.deb
 sudo dpkg -i elasticsearch-oss-$ES_VER-amd64.deb
 sudo apt-get -y update
@@ -65,10 +63,9 @@ echo "node.name: init-master" >> /etc/elasticsearch/elasticsearch.yml
 echo "cluster.initial_master_nodes: [\"init-master\"]" >> /etc/elasticsearch/elasticsearch.yml
 echo "cluster.name: odfe-$ODFE_VER-deb-auth" >> /etc/elasticsearch/elasticsearch.yml
 echo "network.host: 0.0.0.0" >> /etc/elasticsearch/elasticsearch.yml
-sed -i 's/-Xms1g/-Xms6g/' /etc/elasticsearch/jvm.options
-sed -i 's/-Xmx1g/-Xmx6g/' /etc/elasticsearch/jvm.options
+
 # Start the service
-sudo systemctl start elasticsearch.service
+sudo /etc/init.d/elasticsearch start
 sleep 30
 
 # Installing kibana
@@ -94,8 +91,6 @@ echo "node.name: init-master" >> config/elasticsearch.yml
 echo "cluster.initial_master_nodes: [\"init-master\"]" >> config/elasticsearch.yml
 echo "cluster.name: odfe-$ODFE_VER-tarball-auth" >> config/elasticsearch.yml
 echo "network.host: 0.0.0.0" >> config/elasticsearch.yml
-sed -i 's/-Xms1g/-Xms6g/' config/jvm.options
-sed -i 's/-Xmx1g/-Xmx6g/' config/jvm.options
 
 nohup ./opendistro-tar-install.sh 2>&1 > /dev/null &
 
