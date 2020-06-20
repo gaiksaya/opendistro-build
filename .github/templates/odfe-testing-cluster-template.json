@@ -92,11 +92,11 @@
             "Properties" : {
                 "Name" : { "Fn::Join": [
                     "", [
-                      "ODFE_ES_",
+                      "ODFE-ES-",
                       {
                         "Ref": "distribution"
                       },
-                      "_security_",
+                      "-security-",
                       {
                           "Ref": "security"
                       }]
@@ -138,11 +138,11 @@
             "Properties" : {
                 "Name" : { "Fn::Join": [
                     "", [
-                      "ODFE_KIBANA_",
+                      "ODFE-KIBANA-",
                       {
                         "Ref": "distribution"
                       },
-                      "_security_",
+                      "-security-",
                       {
                           "Ref": "security"
                       }]
@@ -184,11 +184,11 @@
             "Properties" : {
                 "Name" : { "Fn::Join": [
                     "", [
-                      "ODFE_ES_",
+                      "ODFE-ES-",
                       {
                         "Ref": "distribution"
                       },
-                      "_security_",
+                      "-security-",
                       {
                           "Ref": "security"
                       }]
