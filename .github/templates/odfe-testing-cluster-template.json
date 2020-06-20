@@ -27,7 +27,7 @@
     "Mappings" : {
         "DistributionMap" : {
           "RPM" : { "amiId" : "ami-0e34e7b9ca0ace12d" },
-          "TAR" : { "amiId" : "ami-0e34e7b9ca0ace12d" },
+          "TAR" : { "amiId" : "ami-003634241a8fcdec0" },
           "DEB" : { "amiId" : "ami-003634241a8fcdec0" }
         }
       },
@@ -90,6 +90,17 @@
             "Type" : "AWS::ElasticLoadBalancingV2::LoadBalancer",
             "Condition" : "CreateDisableSecurityResources",
             "Properties" : {
+                "Name" : { "Fn::Join": [
+                    "", [
+                      "ODFE_ES_",
+                      {
+                        "Ref": "distribution"
+                      },
+                      "_security_",
+                      {
+                          "Ref": "security"
+                      }]
+                  ]},
                 "Scheme" : "internet-facing",
                 "SecurityGroups" : [ "sg-01fd2dab71e3ca62e" ],
                 "Subnets": ["subnet-c64a889b","subnet-63514d28","subnet-4bd52633","subnet-1411543f"],
@@ -125,6 +136,17 @@
         "KibanaLoadBalancer" : {
             "Type" : "AWS::ElasticLoadBalancingV2::LoadBalancer",
             "Properties" : {
+                "Name" : { "Fn::Join": [
+                    "", [
+                      "ODFE_KIBANA_",
+                      {
+                        "Ref": "distribution"
+                      },
+                      "_security_",
+                      {
+                          "Ref": "security"
+                      }]
+                  ]},
                 "Scheme" : "internet-facing",
                 "SecurityGroups" : [ "sg-01fd2dab71e3ca62e" ],
                 "Subnets": ["subnet-c64a889b","subnet-63514d28","subnet-4bd52633","subnet-1411543f"],
@@ -160,6 +182,17 @@
             "Type" : "AWS::ElasticLoadBalancingV2::LoadBalancer",
             "Condition" : "CreateSecurityResources",
             "Properties" : {
+                "Name" : { "Fn::Join": [
+                    "", [
+                      "ODFE_ES_",
+                      {
+                        "Ref": "distribution"
+                      },
+                      "_security_",
+                      {
+                          "Ref": "security"
+                      }]
+                  ]},
                 "Scheme" : "internet-facing",
                 "Subnets": ["subnet-c64a889b","subnet-63514d28","subnet-4bd52633","subnet-1411543f"],
                 "Type" : "network"
