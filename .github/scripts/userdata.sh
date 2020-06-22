@@ -81,26 +81,30 @@ then
 ###### TAR package with Security enabled ######
 cat <<- EOF > $REPO_ROOT/userdata_$1.sh
 #!/bin/bash
-sudo sysctl -w vm.max_map_count=262144
+echo "*   hard  nofile  65535" | tee --append /etc/security/limits.conf
+echo "*   soft  nofile  65535" | tee --append /etc/security/limits.conf
 sudo apt-get install -y zip
+ulimit -n 65535
 wget https://d3g5vo6xdbdb9a.cloudfront.net/downloads/tarball/opendistro-elasticsearch/opendistroforelasticsearch-$ODFE_VER.tar.gz
 tar zxvf opendistroforelasticsearch-$ODFE_VER.tar.gz
+chown -R ubuntu:ubuntu opendistroforelasticsearch-$ODFE_VER
 cd opendistroforelasticsearch-$ODFE_VER/
 
 echo "node.name: init-master" >> config/elasticsearch.yml
 echo "cluster.initial_master_nodes: [\"init-master\"]" >> config/elasticsearch.yml
 echo "cluster.name: odfe-$ODFE_VER-tarball-auth" >> config/elasticsearch.yml
 echo "network.host: 0.0.0.0" >> config/elasticsearch.yml
-
-nohup ./opendistro-tar-install.sh 2>&1 > /dev/null &
+sudo sysctl -w vm.max_map_count=262144
+sudo -u ubuntu nohup ./opendistro-tar-install.sh 2>&1 > /dev/null &
 
 #Installing kibana
+cd /
 wget https://d3g5vo6xdbdb9a.cloudfront.net/downloads/tarball/opendistroforelasticsearch-kibana/opendistroforelasticsearch-kibana-$ODFE_VER.tar.gz
 tar zxvf opendistroforelasticsearch-kibana-$ODFE_VER.tar.gz
+chown -R ubuntu:ubuntu opendistroforelasticsearch-kibana
 cd opendistroforelasticsearch-kibana/
 echo "server.host: 0.0.0.0" >> config/kibana.yml
-
-nohup ./bin/kibana &
+sudo -u ubuntu nohup ./bin/kibana &
 EOF
 fi
 
