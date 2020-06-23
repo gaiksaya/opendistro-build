@@ -1,8 +1,8 @@
 name: Create testing cluster
 
-# Make sure to pass the distribution type and security (if needed) as parameters
+# Make sure to pass the distribution type and security feature as parameters
 # { 
-#  "distribution_type": "RPM/DEB/TAR",
+#  "distribution": "RPM/DEB/TAR",
 #  "security": "enable/disable"
 # }
 
@@ -49,7 +49,7 @@ jobs:
             
             #Creating new cluster
             echo "Creating $stackName stack"
-            
+
             .github/scripts/userdata.sh "$distribution_type" "$security"
             ls -ltr
 
@@ -61,7 +61,7 @@ jobs:
             --capabilities CAPABILITY_NAMED_IAM
 
             aws cloudformation wait stack-create-complete --stack-name $stackName
-
+            sleep 60
             echo "################################################################################################"
             echo "Elasticsearch endpoint = `aws elbv2 describe-load-balancers --name ODFE-ES-$distribution_type-SECURITY-$security --query 'LoadBalancers[*].DNSName' --output text`"
             echo "################################################################################################"

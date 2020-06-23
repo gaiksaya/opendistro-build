@@ -6,12 +6,12 @@ ES_VER=`$REPO_ROOT/bin/version-info --es`
 ODFE_VER=`$REPO_ROOT/bin/version-info --od`
 echo $ES_VER $ODFE_VER
 
-if [ "$#" -eq 0 ] || [ "$#" -gt 2 ]
+if [ "$#" -eq 0 ] || [ "$#" -gt 2 ] || [ -z "$1" ] || [ -z "$2" ]
 then
     echo "Please assign at 2 parameters when running this script"
-    echo "Example: $0 [\$DISTRIBUTION_TYPE] [\$ENABLE]"
+    echo "Format: \"distribution\"=\"rpm\" \"security\"=\"enable\""
     echo "Example: $0 \"RPM\" \"ENABLE\""
-    echo "Example: $0 \"RPM\" \"DISABLE\""
+    echo "Example: $0 \"DEB\" \"DISABLE\""
     exit 1
 fi
 
