@@ -8,8 +8,11 @@ echo $ES_VER $ODFE_VER
 
 if [ "$#" -eq 0 ] || [ "$#" -gt 2 ] || [ -z "$1" ] || [ -z "$2" ]
 then
-    echo "Please assign at 2 parameters when running this script"
-    echo "Format: \"distribution\"=\"rpm\" \"security\"=\"enable\""
+    echo "Please assign 2 parameters when running this script"
+    echo "Format for dispatch event: \"client_payload\": {
+		\n\"distribution\" : \"rpm\",
+		\n\"security\" : \"enable\"
+	}"
     echo "Example: $0 \"RPM\" \"ENABLE\""
     echo "Example: $0 \"DEB\" \"DISABLE\""
     exit 1
