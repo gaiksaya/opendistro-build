@@ -96,7 +96,7 @@
                       {
                         "Ref": "distribution"
                       },
-                      "-security-",
+                      "-SECURITY-",
                       {
                           "Ref": "security"
                       }]
@@ -142,7 +142,7 @@
                       {
                         "Ref": "distribution"
                       },
-                      "-security-",
+                      "-SECURITY-",
                       {
                           "Ref": "security"
                       }]
