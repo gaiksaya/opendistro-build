@@ -60,7 +60,7 @@
                             },
                             "-security-",
                             {
-                                "Ref": "security"
+                                "Ref": "SECURITY"
                             },
                             "-Testing-Cluster"
                           ]
