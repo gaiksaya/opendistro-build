@@ -58,9 +58,9 @@
                             {
                               "Ref": "distribution"
                             },
-                            "-security-",
+                            "-SECURITY-",
                             {
-                                "Ref": "SECURITY"
+                                "Ref": "security"
                             },
                             "-Testing-Cluster"
                           ]
