@@ -47,11 +47,10 @@ jobs:
                 fi
             done
             
-            #Creating new cluster
-            echo "Creating $stackName stack"
-
             .github/scripts/userdata.sh "$distribution_type" "$security"
             ls -ltr
+
+            echo "Creating $stackName stack"
 
             aws cloudformation create-stack --stack-name $stackName \
             --template-body file://.github/templates/odfe-testing-cluster-template.json \

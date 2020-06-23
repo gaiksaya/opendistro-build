@@ -10,8 +10,8 @@ if [ "$#" -eq 0 ] || [ "$#" -gt 2 ] || [ -z "$1" ] || [ -z "$2" ]
 then
     echo "Please assign 2 parameters when running this script"
     echo "Format for dispatch event: \"client_payload\": {
-		\n\"distribution\" : \"rpm\",
-		\n\"security\" : \"enable\"
+		\"distribution\" : \"rpm\",
+		\"security\" : \"enable\"
 	}"
     echo "Example: $0 \"RPM\" \"ENABLE\""
     echo "Example: $0 \"DEB\" \"DISABLE\""
