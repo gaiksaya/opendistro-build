@@ -8,18 +8,16 @@ echo $ES_VER $ODFE_VER
 
 if [ "$#" -eq 0 ] || [ "$#" -gt 2 ]
 then
-    echo "Please assign at least 1 and at most 2 parameters when running this script"
+    echo "Please assign at 2 parameters when running this script"
     echo "Example: $0 [\$DISTRIBUTION_TYPE] [\$ENABLE]"
-    echo "Example: $0 \"RPM\""
     echo "Example: $0 \"RPM\" \"ENABLE\""
+    echo "Example: $0 \"RPM\" \"DISABLE\""
     exit 1
 fi
 
+###### RPM package with Security enabled ######
 if [ "$1" = "RPM" ]
 then
-###### RPM package with Security enabled ######
-
-#installing ODFE
 cat <<- EOF > $REPO_ROOT/userdata_$1.sh
 #!/bin/bash
 sudo -i
@@ -38,13 +36,12 @@ sleep 30
 # Installing kibana
 sudo yum install -y opendistroforelasticsearch-kibana-$ODFE_VER
 echo "server.host: 0.0.0.0" >> /etc/kibana/kibana.yml
-sudo systemctl start kibana.service
 EOF
 fi
 
+###### DEB package with Security enabled ######
 if [ "$1" = "DEB" ]
 then 
-###### DEB package with Security enabled ######
 cat <<- EOF > $REPO_ROOT/userdata_$1.sh
 #!/bin/bash
 #installing ODFE
@@ -71,14 +68,13 @@ sleep 30
 # Installing kibana
 sudo apt install opendistroforelasticsearch-kibana
 echo "server.host: 0.0.0.0" >> /etc/kibana/kibana.yml
-sudo systemctl start kibana.service
 
 EOF
 fi
 
+###### TAR package with Security enabled ######
 if [ "$1" = "TAR" ]
 then 
-###### TAR package with Security enabled ######
 cat <<- EOF > $REPO_ROOT/userdata_$1.sh
 #!/bin/bash
 echo "*   hard  nofile  65535" | tee --append /etc/security/limits.conf
@@ -104,19 +100,36 @@ tar zxvf opendistroforelasticsearch-kibana-$ODFE_VER.tar.gz
 chown -R ubuntu:ubuntu opendistroforelasticsearch-kibana
 cd opendistroforelasticsearch-kibana/
 echo "server.host: 0.0.0.0" >> config/kibana.yml
-sudo -u ubuntu nohup ./bin/kibana &
 EOF
 fi
 
 #### Security disable feature ####
 if  [[ "$2" = "DISABLE" ]]
 then
-    if [[ "$1" = "RPM"  ||  "$1" = "DEB" ]]
-    then
-      sed -i 's/^echo \"cluster.name.*/echo \"cluster.name \: odfe-\$ODFE_VER-\$1-noauth\" \>\> \/etc\/elasticsearch\/elasticsearch.yml/g' userdata_$1.sh
-      sed -i '/echo \"network.host/a echo \"opendistro_security.disabled: true\" \>\> \/etc\/elasticsearch\/elasticsearch.yml' userdata_$1.sh
-     else
-      sed -i 's/^echo \"cluster.name.*/echo \"cluster.name \: odfe-\$ODFE_VER-\$1-noauth\" \>\> config\/elasticsearch.yml/g' userdata_$1.sh
-      sed -i '/echo \"network.host/a echo \"opendistro_security.disabled: true\" \>\> config\/elasticsearch.yml' userdata_$1.sh
+if [[ "$1" = "RPM"  ||  "$1" = "DEB" ]]
+then
+sed -i "s/^echo \"cluster.name.*/echo \"cluster.name \: odfe-$ODFE_VER-$1-noauth\" \>\> \/etc\/elasticsearch\/elasticsearch.yml/g" $REPO_ROOT/userdata_$1.sh
+sed -i "/echo \"network.host/a echo \"opendistro_security.disabled: true\" \>\> \/etc\/elasticsearch\/elasticsearch.yml" $REPO_ROOT/userdata_$1.sh
+cat <<- EOF >> userdata_$1.sh
+sudo rm -rf /usr/share/kibana/plugins/opendistro_security
+sudo sed -i /^opendistro_security/d /etc/kibana/kibana.yml
+sudo sed -i 's/https/http/' /etc/kibana/kibana.yml
+EOF
+else
+sed -i "s/^echo \"cluster.name.*/echo \"cluster.name \: odfe-$ODFE_VER-$1-noauth\" \>\> config\/elasticsearch.yml/g" $REPO_ROOT/userdata_$1.sh
+sed -i "/echo \"network.host/a echo \"opendistro_security.disabled: true\" \>\> config\/elasticsearch.yml" $REPO_ROOT/userdata_$1.sh
+cat <<- EOF >> userdata_$1.sh
+sudo rm -rf opendistroforelasticsearch-kibana/plugins/opendistro_security
+sed -i /^opendistro_security/d config/kibana.yml
+sed -i 's/https/http/' config/kibana.yml
+EOF
     fi
+fi
+
+#Start Kibana
+if [[ "$1" = "RPM"  ||  "$1" = "DEB" ]]
+then
+echo "sudo systemctl start kibana.service" >> $REPO_ROOT/userdata_$1.sh
+else
+echo "sudo -u ubuntu nohup ./bin/kibana &" >> $REPO_ROOT/userdata_$1.sh
 fi
