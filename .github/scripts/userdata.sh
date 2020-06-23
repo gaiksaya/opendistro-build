@@ -119,11 +119,11 @@ else
 sed -i "s/^echo \"cluster.name.*/echo \"cluster.name \: odfe-$ODFE_VER-$1-noauth\" \>\> config\/elasticsearch.yml/g" $REPO_ROOT/userdata_$1.sh
 sed -i "/echo \"network.host/a echo \"opendistro_security.disabled: true\" \>\> config\/elasticsearch.yml" $REPO_ROOT/userdata_$1.sh
 cat <<- EOF >> userdata_$1.sh
-sudo rm -rf opendistroforelasticsearch-kibana/plugins/opendistro_security
+sudo rm -rf plugins/opendistro_security
 sed -i /^opendistro_security/d config/kibana.yml
 sed -i 's/https/http/' config/kibana.yml
 EOF
-    fi
+fi
 fi
 
 #Start Kibana
