@@ -188,7 +188,7 @@
                       {
                         "Ref": "distribution"
                       },
-                      "-security-",
+                      "-SECURITY-",
                       {
                           "Ref": "security"
                       }]
