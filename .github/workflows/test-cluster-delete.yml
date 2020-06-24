@@ -23,7 +23,7 @@ jobs:
             #!/bin/bash
             set -e
             stacks=`aws cloudformation list-stacks --stack-status-filter CREATE_COMPLETE --query 'StackSummaries[*].StackName' --output text`
-            echo "Active stacks:\n$stacks" | tr " " "\n"
+            echo "Active stacks : $stacks"
 
             for i in $stacks
             do
