@@ -29,6 +29,10 @@
         "ODFESecurityGroup":{
             "Type" : "String",
             "Description": "Security Group id to be attached to all the resources"
+        },
+        "keypair":{
+            "Type" : "String",
+            "Description": "Security Group id to be attached to all the resources"
         }
   
     },
@@ -85,7 +89,7 @@
                   "ImageId": { "Fn::FindInMap" : [ "DistributionMap", { "Ref" : "distribution" }, "amiId"]},
                   "InstanceType": "m5a.large",
                   "IamInstanceProfile": "odfe_testing_cluster_role",
-                  "KeyName": "fedorakey",
+                  "KeyName": {"Ref" : "keypair"},
                   "AssociatePublicIpAddress": true,
                   "SecurityGroups": [{"Ref" : "ODFESecurityGroup"}],
                   "UserData": {
