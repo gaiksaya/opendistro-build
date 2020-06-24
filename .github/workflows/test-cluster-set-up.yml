@@ -59,7 +59,6 @@ jobs:
             ParameterKey=security,ParameterValue=$security \
             ParameterKey=vpcId,ParameterValue=${{secrets.vpcId}} \
             ParameterKey=ODFESecurityGroup,ParameterValue=${{secrets.ODFESecurityGroup}}
-            --capabilities CAPABILITY_NAMED_IAM
 
             aws cloudformation wait stack-create-complete --stack-name $stackName
             sleep 60
