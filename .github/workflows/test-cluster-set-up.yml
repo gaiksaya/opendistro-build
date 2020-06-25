@@ -38,38 +38,38 @@ jobs:
             echo $distribution_type $security
             stackName=ODFE-$distribution_type-SECURITY-$security
             echo $stackName
+
+            existingStacks=`aws cloudformation list-stacks --stack-status-filter CREATE_COMPLETE --query 'StackSummaries[*].StackName' --output text`
+
+            for i in $existingStacks
+            do
+                if [[ $i = $stackName ]]
+                then
+                    echo "Stack already exists! Deleting the old stack"
+                    aws cloudformation delete-stack --stack-name $stackName
+                    aws cloudformation wait stack-delete-complete --stack-name $stackName
+                    echo "$stackName deleted successfully!!"
+                fi
+            done
             
-            # existingStacks=`aws cloudformation list-stacks --stack-status-filter CREATE_COMPLETE --query 'StackSummaries[*].StackName' --output text`
+            .github/scripts/userdata.sh "$distribution_type" "$security"
+            ls -ltr
 
-            # for i in $existingStacks
-            # do
-            #     if [[ $i = $stackName ]]
-            #     then
-            #         echo "Stack already exists! Deleting the old stack"
-            #         aws cloudformation delete-stack --stack-name $stackName
-            #         aws cloudformation wait stack-delete-complete --stack-name $stackName
-            #         echo "$stackName deleted successfully!!"
-            #     fi
-            # done
-            
-            # .github/scripts/userdata.sh "$distribution_type" "$security"
-            # ls -ltr
+            echo "Creating $stackName stack"
 
-            # echo "Creating $stackName stack"
+            aws cloudformation create-stack --stack-name $stackName \
+            --template-body file://.github/templates/odfe-testing-cluster-template.json \
+            --parameters ParameterKey=userdata,ParameterValue=$(base64 -w0 userdata_$distribution_type.sh) \
+            ParameterKey=distribution,ParameterValue=$distribution_type \
+            ParameterKey=security,ParameterValue=$security \
+            ParameterKey=vpcId,ParameterValue=${{secrets.VPCID}} \
+            ParameterKey=ODFESecurityGroup,ParameterValue=${{secrets.ODFESECURITYGROUP}} \
+            ParameterKey=keypair,ParameterValue=${{secrets.AWS_ODFE_TESTING_CLUSTER_KEYPAIR}}
 
-            # aws cloudformation create-stack --stack-name $stackName \
-            # --template-body file://.github/templates/odfe-testing-cluster-template.json \
-            # --parameters ParameterKey=userdata,ParameterValue=$(base64 -w0 userdata_$distribution_type.sh) \
-            # ParameterKey=distribution,ParameterValue=$distribution_type \
-            # ParameterKey=security,ParameterValue=$security \
-            # ParameterKey=vpcId,ParameterValue=${{secrets.VPCID}} \
-            # ParameterKey=ODFESecurityGroup,ParameterValue=${{secrets.ODFESECURITYGROUP}} \
-            # ParameterKey=keypair,ParameterValue=${{secrets.AWS_ODFE_TESTING_CLUSTER_KEYPAIR}}
-
-            # aws cloudformation wait stack-create-complete --stack-name $stackName
-            # sleep 60
-            # echo "################################################################################################"
-            # echo "Elasticsearch endpoint = `aws elbv2 describe-load-balancers --name ODFE-ES-$distribution_type-SECURITY-$security --query 'LoadBalancers[*].DNSName' --output text`"
-            # echo "################################################################################################"
-            # echo "Kibana endpoint = `aws elbv2 describe-load-balancers --name ODFE-KIBANA-$distribution_type-SECURITY-$security --query 'LoadBalancers[*].DNSName' --output text`"
-            # echo "################################################################################################"
+            aws cloudformation wait stack-create-complete --stack-name $stackName
+            sleep 60
+            echo "################################################################################################"
+            echo "Elasticsearch endpoint = `aws elbv2 describe-load-balancers --name ODFE-ES-$distribution_type-SECURITY-$security --query 'LoadBalancers[*].DNSName' --output text`"
+            echo "################################################################################################"
+            echo "Kibana endpoint = `aws elbv2 describe-load-balancers --name ODFE-KIBANA-$distribution_type-SECURITY-$security --query 'LoadBalancers[*].DNSName' --output text`"
+            echo "################################################################################################"
