@@ -52,7 +52,7 @@ sudo -i
 sudo sysctl -w vm.max_map_count=262144
 sudo apt-get install -y zip
 wget -qO - https://d3g5vo6xdbdb9a.cloudfront.net/GPG-KEY-opendistroforelasticsearch | sudo apt-key add -
-echo "deb https://d3g5vo6xdbdb9a.cloudfront.net/staging/apt stable main" | sudo tee -a /etc/apt/sources.list.d/opendistroforelasticsearch.list
+echo "deb https://d3g5vo6xdbdb9a.cloudfront.net/apt stable main" | sudo tee -a /etc/apt/sources.list.d/opendistroforelasticsearch.list
 wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-oss-$ES_VER-amd64.deb
 sudo dpkg -i elasticsearch-oss-$ES_VER-amd64.deb
 sudo apt-get -y update
