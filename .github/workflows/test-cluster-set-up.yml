@@ -18,7 +18,7 @@ jobs:
       matrix:
         distribution: [ RPM, DEB ,TAR ]
         security: [ ENABLE, DISABLE ]
-        
+
     steps:
       - uses: actions/checkout@v1
 
@@ -34,8 +34,8 @@ jobs:
             #!/bin/bash
             set -e
 
-            distribution_type=`echo ${{github.event.client_payload.distribution}} | tr [:lower:] [:upper:]`
-            security=`echo ${{github.event.client_payload.security}} | tr [:lower:] [:upper:]`
+            distribution_type=${{matrix.distribution}}
+            security=${{matrix.security}}
             echo $distribution_type $security
             stackName=ODFE-$distribution_type-SECURITY-$security
 
