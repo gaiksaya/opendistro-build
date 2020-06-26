@@ -51,53 +51,6 @@
     },
   
     "Resources": {         
-  
-        "ODFEASG" : {
-            "Type" : "AWS::AutoScaling::AutoScalingGroup",
-            "Properties" : {
-                "AvailabilityZones" : [ "us-west-2a","us-west-2b","us-west-2c","us-west-2d"  ],
-                "LaunchConfigurationName" : { "Ref" : "asgLaunchConfig" },
-                "MinSize" : "1",
-                "MaxSize" : "1",
-                "DesiredCapacity" : "1",
-                "TargetGroupARNs": [{"Fn::If": ["CreateSecurityResources", {"Ref" : "ESSTargetGroup"}, {"Ref":"ESTargetGroup"}]}, 
-                        {"Ref":"KibanaTargetGroup"}],
-                "Tags":[{
-                    "Key" : "Name", 
-                    "Value" : {
-                        "Fn::Join": [
-                          "", [
-                            "ODFE-",
-                            {
-                              "Ref": "distribution"
-                            },
-                            "-SECURITY-",
-                            {
-                                "Ref": "security"
-                            },
-                            "-Testing-Cluster"
-                          ]
-                        ]
-                      }, 
-                    "PropagateAtLaunch" : "true"}]
-                }
-            },
-
-        "asgLaunchConfig":{
-              "Type": "AWS::AutoScaling::LaunchConfiguration",
-              "Properties": {
-                  "ImageId": { "Fn::FindInMap" : [ "DistributionMap", { "Ref" : "distribution" }, "amiId"]},
-                  "InstanceType": "m5a.large",
-                  "IamInstanceProfile": "odfe_testing_cluster_role",
-                  "KeyName": {"Ref" : "keypair"},
-                  "AssociatePublicIpAddress": true,
-                  "SecurityGroups": [{"Ref" : "ODFESecurityGroup"}],
-                  "UserData": {
-                      "Ref": "userdata"}
-                  
-                }
-        },
-
 
         "ESLoadBalancer" : {
             "Type" : "AWS::ElasticLoadBalancingV2::LoadBalancer",
@@ -139,6 +92,17 @@
             "Type" : "AWS::ElasticLoadBalancingV2::TargetGroup",
             "Condition" : "CreateDisableSecurityResources",
             "Properties" : {
+                "Name" : { "Fn::Join": [
+                    "", [
+                      "ODFE-KIBANA-",
+                      {
+                        "Ref": "distribution"
+                      },
+                      "-SECURITY-",
+                      {
+                          "Ref": "security"
+                      }]
+                  ]},
                 "HealthCheckEnabled" : "True",
                 "Port" : 9200,
                 "HealthCheckPath" : "/",
@@ -183,6 +147,17 @@
         "KibanaTargetGroup" : {
             "Type" : "AWS::ElasticLoadBalancingV2::TargetGroup",
             "Properties" : {
+                "Name" : { "Fn::Join": [
+                    "", [
+                      "ODFE-KIBANA-",
+                      {
+                        "Ref": "distribution"
+                      },
+                      "-SECURITY-",
+                      {
+                          "Ref": "security"
+                      }]
+                  ]},
                 "HealthCheckEnabled" : "True",
                 "Port" : 5601,
                 "HealthCheckPath" : "/api/status",
@@ -228,6 +203,17 @@
             "Type" : "AWS::ElasticLoadBalancingV2::TargetGroup",
             "Condition" : "CreateSecurityResources",
             "Properties" : {
+                "Name" : { "Fn::Join": [
+                    "", [
+                      "ODFE-KIBANA-",
+                      {
+                        "Ref": "distribution"
+                      },
+                      "-SECURITY-",
+                      {
+                          "Ref": "security"
+                      }]
+                  ]},
                 "Port" : 9200,
                 "Protocol" : "TCP",
                 "VpcId" : {"Ref" : "vpcId"}
