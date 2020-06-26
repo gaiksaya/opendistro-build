@@ -64,7 +64,6 @@ jobs:
             --parameters ParameterKey=userdata,ParameterValue=$(base64 -w0 userdata_$distribution_type.sh) \
             ParameterKey=distribution,ParameterValue=$distribution_type \
             ParameterKey=security,ParameterValue=$security \
-            ParameterKey=vpcId,ParameterValue=${{secrets.VPCID}} \
             ParameterKey=ODFESecurityGroup,ParameterValue=${{secrets.ODFESECURITYGROUP}} \
             ParameterKey=keypair,ParameterValue=${{secrets.AWS_ODFE_TESTING_CLUSTER_KEYPAIR}} \
             ParameterKey=esTargetGroup,ParameterValue=$esTargetGroup \
