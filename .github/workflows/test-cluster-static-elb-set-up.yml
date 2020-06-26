@@ -14,10 +14,10 @@ jobs:
   Create-Cluster:
     name: Create Testing cluster
     runs-on: ubuntu-latest
-    strategy:
-        matrix:
-          distribution: [ RPM, DEB ,TAR ]
-          security: [ ENABLE, DISABLE ]
+    # strategy:
+    #     matrix:
+    #       distribution: [ RPM, DEB ,TAR ]
+    #       security: [ ENABLE, DISABLE ]
 
     steps:
       - uses: actions/checkout@v1
@@ -60,7 +60,7 @@ jobs:
             echo "Creating $stackName stack"
 
             aws cloudformation create-stack --stack-name $stackName \
-            --template-body file://.github/templates/odfe-testing-clusterstatic-elb-template.json \
+            --template-body file://.github/templates/odfe-testing-cluster-static-elb-template.json \
             --parameters ParameterKey=userdata,ParameterValue=$(base64 -w0 userdata_$distribution_type.sh) \
             ParameterKey=distribution,ParameterValue=$distribution_type \
             ParameterKey=security,ParameterValue=$security \
