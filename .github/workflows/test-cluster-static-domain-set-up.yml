@@ -34,7 +34,7 @@ jobs:
             set -e
 
             distribution_type=${{matrix.distribution}}
-            security=`echo ${{matrix.security}}
+            security=${{matrix.security}}
             echo $distribution_type $security
             stackName=ODFE-$distribution_type-SECURITY-$security
 
