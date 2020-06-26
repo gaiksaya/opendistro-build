@@ -1,23 +1,18 @@
-name: Create testing cluster
+name: Create testing cluster with static domain
 
-# Make sure to pass the distribution type and security feature as parameters
-# { 
-#  "distribution": "RPM/DEB/TAR",
-#  "security": "enable/disable"
-# }
+# Make sure to pass the distribution type (RPM/DEB/TAR) and security feature (enable, disable) as client_payload in the dispatch event
+# Example: client_payload: { "distribution": "rpm", "security": "enable" }
+# Example: client_payload: { "distribution": "deb", "security": "disable" }
+# NOTE: This workflow is based on the static ELBs pre-configured in the AWS account
 
 on:
   repository_dispatch:
-    types: [test-cluster-static-elb-set-up]
+    types: [test-cluster-static-domain]
 
 jobs:
   Create-Cluster:
     name: Create Testing cluster
     runs-on: ubuntu-latest
-    strategy:
-        matrix:
-          distribution: [ RPM, DEB ,TAR ]
-          security: [ ENABLE, DISABLE ]
 
     steps:
       - uses: actions/checkout@v1
@@ -29,15 +24,13 @@ jobs:
           aws-secret-access-key: ${{ secrets.STACK_SECRET }}
           aws-region: us-west-2
 
-      - name: Creating cluster
+      - name: Creating cluster with static domain name
         run: |
             #!/bin/bash
             set -e
 
-            # distribution_type=`echo ${{github.event.client_payload.distribution}} | tr [:lower:] [:upper:]`
-            # security=`echo ${{github.event.client_payload.security}} | tr [:lower:] [:upper:]`
-            distribution_type=${{matrix.distribution}}
-            security=${{matrix.security}}
+            distribution_type=`echo ${{github.event.client_payload.distribution}} | tr [:lower:] [:upper:]`
+            security=`echo ${{github.event.client_payload.security}} | tr [:lower:] [:upper:]`
             echo $distribution_type $security
             stackName=ODFE-$distribution_type-SECURITY-$security
 
@@ -64,7 +57,7 @@ jobs:
             echo "Creating $stackName stack"
 
             aws cloudformation create-stack --stack-name $stackName \
-            --template-body file://.github/templates/odfe-testing-cluster-static-elb-template.json \
+            --template-body file://.github/templates/odfe-testing-cluster-static-domain-template.json \
             --parameters ParameterKey=userdata,ParameterValue=$(base64 -w0 userdata_$distribution_type.sh) \
             ParameterKey=distribution,ParameterValue=$distribution_type \
             ParameterKey=security,ParameterValue=$security \
@@ -75,8 +68,3 @@ jobs:
 
             aws cloudformation wait stack-create-complete --stack-name $stackName
             sleep 60
-            echo "################################################################################################"
-            echo "Elasticsearch endpoint = `aws elbv2 describe-load-balancers --name ODFE-ES-$distribution_type-SECURITY-$security --query 'LoadBalancers[*].DNSName' --output text`"
-            echo "################################################################################################"
-            echo "Kibana endpoint = `aws elbv2 describe-load-balancers --name ODFE-KIBANA-$distribution_type-SECURITY-$security --query 'LoadBalancers[*].DNSName' --output text`"
-            echo "################################################################################################"
