@@ -34,17 +34,6 @@ jobs:
               stackName=ODFE-$distribution_type-SECURITY-$security
               echo $stackName
               stack_setup $distribution_type $security
-            elif ${{ github.event_name == 'schedule' }} then
-              for type in RPM DEB TAR
-              do
-                for sec in ENABLE DISABLE
-                do
-                  distribution_type=$type
-                  security=$sec
-                  stackName=ODFE-$distribution_type-SECURITY-$security
-                  stack_setup
-                done
-              done
             fi
             
             #Function to create stack
