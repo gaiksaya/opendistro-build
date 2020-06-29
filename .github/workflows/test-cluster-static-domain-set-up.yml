@@ -28,26 +28,22 @@ jobs:
         run: |
             #!/bin/bash
             set -e
-            event=${{ github.event_name }}
-            echo $event
-            if [[ $event == 'repository_dispatch' ]] then
-              # distribution_type=`echo ${{github.event.client_payload.distribution}} | tr [:lower:] [:upper:]`
-              # security=`echo ${{github.event.client_payload.security}} | tr [:lower:] [:upper:]`
-              # stackName=ODFE-$distribution_type-SECURITY-$security
-              # stack_setup()
-              echo INRES
-            elif [[$event == 'schedule']] then
-              # for type in RPM DEB TAR
-              # do
-              #   for sec in ENABLE DISABLE
-              #   do
-              #     distribution_type=$type
-              #     security=$sec
-              #     stackName=ODFE-$distribution_type-SECURITY-$security
-              #     stack_setup()
-              #   done
-              # done
-              echo INSCH
+            if ${{ github.event_name == 'repository_dispatch' }} ]; then
+              distribution_type=`echo ${{github.event.client_payload.distribution}} | tr [:lower:] [:upper:]`
+              security=`echo ${{github.event.client_payload.security}} | tr [:lower:] [:upper:]`
+              stackName=ODFE-$distribution_type-SECURITY-$security
+              stack_setup() $distribution_type $security
+            elif ${{ github.event_name == 'schedule' }} then
+              for type in RPM DEB TAR
+              do
+                for sec in ENABLE DISABLE
+                do
+                  distribution_type=$type
+                  security=$sec
+                  stackName=ODFE-$distribution_type-SECURITY-$security
+                  stack_setup()
+                done
+              done
             fi
             
             #Function to create stack
@@ -65,27 +61,29 @@ jobs:
                   fi
               done
               
-              .github/scripts/userdata.sh "$distribution_type" "$security"
+              .github/scripts/userdata.sh $1 $2
               ls -ltr
+              distribution_type=$1
+              security=$2
+              echo $1 $2
+              # # Getting target groups for ELB mapping
+              # esTargetGroup=`aws elbv2 describe-target-groups --names ES-$distribution_type-SECURITY-$security --query TargetGroups[*].TargetGroupArn --output text`
+              # kibanaTargetGroup=`aws elbv2 describe-target-groups --names KIBANA-$distribution_type-SECURITY-$security --query TargetGroups[*].TargetGroupArn --output text`
   
-              # Getting target groups for ELB mapping
-              esTargetGroup=`aws elbv2 describe-target-groups --names ES-$distribution_type-SECURITY-$security --query TargetGroups[*].TargetGroupArn --output text`
-              kibanaTargetGroup=`aws elbv2 describe-target-groups --names KIBANA-$distribution_type-SECURITY-$security --query TargetGroups[*].TargetGroupArn --output text`
+              # echo "Creating $stackName stack"
   
-              echo "Creating $stackName stack"
+              # aws cloudformation create-stack --stack-name $stackName \
+              # --template-body file://.github/templates/odfe-testing-cluster-static-domain-template.json \
+              # --parameters ParameterKey=userdata,ParameterValue=$(base64 -w0 userdata_$distribution_type.sh) \
+              # ParameterKey=distribution,ParameterValue=$distribution_type \
+              # ParameterKey=security,ParameterValue=$security \
+              # ParameterKey=ODFESecurityGroup,ParameterValue=${{secrets.ODFESECURITYGROUP}} \
+              # ParameterKey=keypair,ParameterValue=${{secrets.AWS_ODFE_TESTING_CLUSTER_KEYPAIR}} \
+              # ParameterKey=esTargetGroup,ParameterValue=$esTargetGroup \
+              # ParameterKey=kibanaTargetGroup,ParameterValue=$kibanaTargetGroup
   
-              aws cloudformation create-stack --stack-name $stackName \
-              --template-body file://.github/templates/odfe-testing-cluster-static-domain-template.json \
-              --parameters ParameterKey=userdata,ParameterValue=$(base64 -w0 userdata_$distribution_type.sh) \
-              ParameterKey=distribution,ParameterValue=$distribution_type \
-              ParameterKey=security,ParameterValue=$security \
-              ParameterKey=ODFESecurityGroup,ParameterValue=${{secrets.ODFESECURITYGROUP}} \
-              ParameterKey=keypair,ParameterValue=${{secrets.AWS_ODFE_TESTING_CLUSTER_KEYPAIR}} \
-              ParameterKey=esTargetGroup,ParameterValue=$esTargetGroup \
-              ParameterKey=kibanaTargetGroup,ParameterValue=$kibanaTargetGroup
-  
-              aws cloudformation wait stack-create-complete --stack-name $stackName
-              sleep 60
+              # aws cloudformation wait stack-create-complete --stack-name $stackName
+              # sleep 60
             }
             
 
