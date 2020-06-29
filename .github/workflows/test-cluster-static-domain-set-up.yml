@@ -34,7 +34,10 @@ jobs:
               security=`echo ${{github.event.client_payload.security}} | tr [:lower:] [:upper:]`
               stackName=ODFE-$distribution_type-SECURITY-$security
               stack_setup()
-            elif ${{ github.event_name == 'schedule' }} then
+            fi
+
+            if ${{ github.event_name == 'schedule' }} 
+            then
               for type in RPM DEB TAR
               do
                 for sec in ENABLE DISABLE
