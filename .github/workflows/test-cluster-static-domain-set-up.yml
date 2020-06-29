@@ -28,25 +28,26 @@ jobs:
         run: |
             #!/bin/bash
             set -e
-
-            if [ ${{ github.event_name == 'repository_dispatch' }} ]; 
-            then
-              distribution_type=`echo ${{github.event.client_payload.distribution}} | tr [:lower:] [:upper:]`
-              security=`echo ${{github.event.client_payload.security}} | tr [:lower:] [:upper:]`
-              stackName=ODFE-$distribution_type-SECURITY-$security
-              stack_setup()
-            elif [ ${{ github.event_name == 'schedule' }} ]; 
-            then
-              for type in RPM DEB TAR
-              do
-              for sec in ENABLE DISABLE
-              do
-              distribution_type=$type
-              security=$sec
-              stackName=ODFE-$distribution_type-SECURITY-$security
-              stack_setup()
-              done
-              done
+            event=${{ github.event_name }}
+            echo $event
+            if [[ $event == 'repository_dispatch' ]] then
+              # distribution_type=`echo ${{github.event.client_payload.distribution}} | tr [:lower:] [:upper:]`
+              # security=`echo ${{github.event.client_payload.security}} | tr [:lower:] [:upper:]`
+              # stackName=ODFE-$distribution_type-SECURITY-$security
+              # stack_setup()
+              echo INRES
+            elif [[$event == 'schedule']] then
+              # for type in RPM DEB TAR
+              # do
+              #   for sec in ENABLE DISABLE
+              #   do
+              #     distribution_type=$type
+              #     security=$sec
+              #     stackName=ODFE-$distribution_type-SECURITY-$security
+              #     stack_setup()
+              #   done
+              # done
+              echo INSCH
             fi
             
             #Function to create stack
