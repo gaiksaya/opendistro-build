@@ -33,7 +33,7 @@ jobs:
               security=`echo ${{github.event.client_payload.security}} | tr [:lower:] [:upper:]`
               stackName=ODFE-$distribution_type-SECURITY-$security
               echo $stackName
-              stack_setup() $distribution_type $security
+              stack_setup $distribution_type $security
             elif ${{ github.event_name == 'schedule' }} then
               for type in RPM DEB TAR
               do
@@ -42,31 +42,29 @@ jobs:
                   distribution_type=$type
                   security=$sec
                   stackName=ODFE-$distribution_type-SECURITY-$security
-                  stack_setup()
+                  stack_setup
                 done
               done
             fi
             
             #Function to create stack
             stack_setup(){
-              existingStacks=`aws cloudformation list-stacks --stack-status-filter CREATE_COMPLETE --query 'StackSummaries[*].StackName' --output text`
+              echo $1 $2
+              # existingStacks=`aws cloudformation list-stacks --stack-status-filter CREATE_COMPLETE --query 'StackSummaries[*].StackName' --output text`
 
-              for i in $existingStacks
-              do
-                  if [[ $i = $stackName ]]
-                  then
-                      echo "Stack already exists! Deleting the old stack"
-                      aws cloudformation delete-stack --stack-name $stackName
-                      aws cloudformation wait stack-delete-complete --stack-name $stackName
-                      echo "$stackName deleted successfully!!"
-                  fi
-              done
+              # for i in $existingStacks
+              # do
+              #     if [[ $i = $stackName ]]
+              #     then
+              #         echo "Stack already exists! Deleting the old stack"
+              #         aws cloudformation delete-stack --stack-name $stackName
+              #         aws cloudformation wait stack-delete-complete --stack-name $stackName
+              #         echo "$stackName deleted successfully!!"
+              #     fi
+              # done
               
               .github/scripts/userdata.sh $1 $2
               ls -ltr
-              distribution_type=$1
-              security=$2
-              echo $1 $2
               # # Getting target groups for ELB mapping
               # esTargetGroup=`aws elbv2 describe-target-groups --names ES-$distribution_type-SECURITY-$security --query TargetGroups[*].TargetGroupArn --output text`
               # kibanaTargetGroup=`aws elbv2 describe-target-groups --names KIBANA-$distribution_type-SECURITY-$security --query TargetGroups[*].TargetGroupArn --output text`
