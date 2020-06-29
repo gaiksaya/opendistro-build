@@ -8,6 +8,9 @@ name: Create testing cluster with static domain
 on:
   repository_dispatch:
     types: [test-cluster-static-domain]
+  schedule:
+    - cron: '*/5 * * * *'
+
 
 jobs:
   Create-Cluster:
@@ -28,6 +31,7 @@ jobs:
         run: |
             #!/bin/bash
             set -e
+
             #Function to create stack
             function stack_setup() {
               distribution_type=$1
