@@ -8,8 +8,8 @@ name: Create testing cluster with static domain
 on:
   repository_dispatch:
     types: [test-cluster-static-domain]
-  schedule:
-    - cron: '*/5 * * * *'
+  # schedule:
+  #   - cron: '*/5 * * * *'
 
 
 jobs:
