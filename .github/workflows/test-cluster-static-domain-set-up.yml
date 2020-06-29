@@ -28,17 +28,11 @@ jobs:
         run: |
             #!/bin/bash
             set -e
-            if ${{ github.event_name == 'repository_dispatch' }} ]; then
-              distribution_type=`echo ${{github.event.client_payload.distribution}} | tr [:lower:] [:upper:]`
-              security=`echo ${{github.event.client_payload.security}} | tr [:lower:] [:upper:]`
-              stackName=ODFE-$distribution_type-SECURITY-$security
-              echo $stackName
-              stack_setup $distribution_type $security
-            fi
-            
             #Function to create stack
-            stack_setup(){
+            function stack_setup() {
               echo $1 $2
+
+
               # existingStacks=`aws cloudformation list-stacks --stack-status-filter CREATE_COMPLETE --query 'StackSummaries[*].StackName' --output text`
 
               # for i in $existingStacks
@@ -73,6 +67,15 @@ jobs:
               # aws cloudformation wait stack-create-complete --stack-name $stackName
               # sleep 60
             }
+
+            if ${{ github.event_name == 'repository_dispatch' }} ]; then
+              distribution_type=`echo ${{github.event.client_payload.distribution}} | tr [:lower:] [:upper:]`
+              security=`echo ${{github.event.client_payload.security}} | tr [:lower:] [:upper:]`
+              stackName=ODFE-$distribution_type-SECURITY-$security
+              echo $stackName
+              stack_setup $distribution_type $security
+            fi
+          
             
 
 
