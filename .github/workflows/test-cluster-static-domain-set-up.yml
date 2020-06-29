@@ -39,13 +39,13 @@ jobs:
             then
               for type in RPM DEB TAR
               do
-                for sec in ENABLE DISABLE
-                do
-                  distribution_type=$type
-                  security=$sec
-                  stackName=ODFE-$distribution_type-SECURITY-$security
-                  stack_setup()
-                done
+              for sec in ENABLE DISABLE
+              do
+              distribution_type=$type
+              security=$sec
+              stackName=ODFE-$distribution_type-SECURITY-$security
+              stack_setup()
+              done
               done
             fi
             
