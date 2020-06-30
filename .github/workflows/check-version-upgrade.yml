@@ -53,7 +53,7 @@ jobs:
 
     Test-RPM:
       name: Test RPM upgrade
-      runs-on: [self-hosted, Linux, X64, odfe-rpm]
+      runs-on: [self-hosted, Linux, X64, amazon]
       steps:
         - uses: actions/checkout@v2
         - name: Setup Java
@@ -73,6 +73,7 @@ jobs:
             sudo yum install wget unzip -y
             export PATH=$PATH:$JAVA_HOME
             sudo yum install opendistroforelasticsearch-$prev_od_version -y
+            sudo apt --fix-broken install
             sudo systemctl start elasticsearch.service
             sleep 30
             echo "####### Running ODFE-${{github.event.client_payload.prev_od_version}} ##############"
@@ -85,6 +86,7 @@ jobs:
             set -e
             od_version=`./bin/version-info --od`
             sudo systemctl stop elasticsearch.service
+            sudo rm -rf /etc/yum.repos.d/opendistroforelasticsearch-artifacts.repo
             sudo curl https://d3g5vo6xdbdb9a.cloudfront.net/yum/staging-opendistroforelasticsearch-artifacts.repo  -o /etc/yum.repos.d/staging-opendistroforelasticsearch-artifacts.repo
             sudo yum install -y opendistroforelasticsearch-$od_version
             sudo systemctl restart elasticsearch.service
