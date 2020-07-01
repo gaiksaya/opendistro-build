@@ -41,14 +41,14 @@ jobs:
           if: ${{ success() }}
           run: |
             #!/bin/bash
-            set -e
             sudo systemctl stop elasticsearch.service
             es_version=`./bin/version-info --es`
             wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-oss-$es_version-amd64.deb
             sudo dpkg -i elasticsearch-oss-$es_version-amd64.deb
             echo "deb https://d3g5vo6xdbdb9a.cloudfront.net/staging/apt stable main" | sudo tee -a /etc/apt/sources.list.d/opendistroforelasticsearch.list
             sudo apt-get update
-            sudo apt --fix-broken install opendistroforelasticsearch -y
+            sudo install opendistroforelasticsearch -y
+            sudo apt --fix-broken install
             sudo systemctl restart elasticsearch.service
 
     Test-RPM:
@@ -111,7 +111,7 @@ jobs:
             volumeid=`aws ec2 describe-instances --filters "Name=tag:Name,Values=ODFE-RPM" | grep VolumeId | cut -d ':' -f 2 | sed 's/[",]//g'`
             az=`aws ec2 describe-instances --filters "Name=tag:Name,Values=ODFE-RPM" --query 'Reservations[*].Instances[*].Placement.AvailabilityZone' --output text`
             aws ec2 stop-instances --instance-ids $instanceid
-            sleep 4m
+            sleep 2m
             aws ec2 detach-volume --volume-id $volumeid
             if [[ `echo $?` -ne 0 ]]; then
             sleep 60
