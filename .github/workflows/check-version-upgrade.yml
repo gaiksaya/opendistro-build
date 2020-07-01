@@ -51,6 +51,7 @@ jobs:
             sudo apt install opendistroforelasticsearch -y
             sudo apt --fix-broken install
             sudo systemctl restart elasticsearch.service
+            echo "########## Upgrade successful ##########"
 
     Test-RPM:
       name: Test RPM upgrade
@@ -76,7 +77,7 @@ jobs:
             sudo yum install opendistroforelasticsearch-$prev_od_version -y
             sudo systemctl start elasticsearch.service
             sleep 30
-            echo "####### Running ODFE-${{github.event.client_payload.prev_od_version}} ##############"
+            echo "############## Running ODFE-${{github.event.client_payload.prev_od_version}} ##############"
           
 
         - name: Upgrading to upcoming version
@@ -91,6 +92,7 @@ jobs:
             sudo yum install -y opendistroforelasticsearch-$od_version
             sudo systemctl restart elasticsearch.service
             sleep 30
+            echo "########## Upgrade successful ##########"
 
     Cleaning-RPM-Host:
       needs: [Test-RPM]
