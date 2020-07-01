@@ -118,7 +118,7 @@ jobs:
             aws ec2 detach-volume --volume-id $volumeid
             fi
             aws ec2 delete-volume --volume-id $volumeid
-            newVolumeId=`aws ec2 create-volume --snapshot snap-016e25334fa537e59 --availability-zone $az --tag-specifications 'ResourceType=volume,Tags=[{Key=Name,Value=ODFE}]'`
+            newVolumeId=`aws ec2 create-volume --snapshot snap-016e25334fa537e59 --availability-zone $az --tag-specifications 'ResourceType=volume,Tags=[{Key=Name,Value=ODFE}]' --query 'VolumeId' --output text`
             sleep 30
             aws ec2 attach-volume --device /dev/xvda --instance-id $instanceid --volume-id $newVolumeId
             aws ec2 start-instances --instance-id $instanceid
