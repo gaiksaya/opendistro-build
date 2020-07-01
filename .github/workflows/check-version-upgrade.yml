@@ -47,7 +47,9 @@ jobs:
             sudo dpkg -i elasticsearch-oss-$es_version-amd64.deb
             echo "deb https://d3g5vo6xdbdb9a.cloudfront.net/staging/apt stable main" | sudo tee -a /etc/apt/sources.list.d/opendistroforelasticsearch.list
             sudo apt-get update
+            set +e
             sudo apt install opendistroforelasticsearch -y
+            set -e
             sudo apt --fix-broken install
             sudo systemctl restart elasticsearch.service
 
