@@ -3,4 +3,4 @@ Invoke-WebRequest -OutFile yq.exe https://github.com/mikefarah/yq/releases/downl
 Start-Process -Wait -FilePath yq.exe -Argument "/silent" -PassThru
 $Env:yq = "$pwd\yq.exe"
 echo $Env:yq
-yq.exe --version
+.\yq.exe --version
