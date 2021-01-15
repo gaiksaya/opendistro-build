@@ -13,7 +13,6 @@ jobs:
       - uses: actions/checkout@v1
       - name: Required packages
         run: release-tools/scripts/required_packages.sh
-      - name: Set env
         env:
           es_version: release-tools/scripts/version-info.sh --es
       - name: Get env
