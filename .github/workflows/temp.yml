@@ -22,11 +22,9 @@ jobs:
 
       - name: Retrieve plugin tags
         run: |
-          echo "yq=$pwd\yq.exe" >> $GITHUB_ENV
-          echo ${{env.yq}}
           echo "p_tag_kib_nb=$(release-tools/scripts/plugin_tag.sh opendistro-for-elasticsearch/kibana-notebooks)" >> $GITHUB_ENV
+          ./yq eval '.versions.ES.current' release-tools/scripts/manifest.yml
           echo "es_version=$(release-tools/scripts/version-info.sh --es)" >> $GITHUB_ENV
-          echo ${{env.es_version}}
 
       - uses: actions/checkout@v2
         with:
