@@ -25,8 +25,10 @@ jobs:
           echo "p_tag_kib_nb=$(release-tools/scripts/plugin_tag.sh opendistro-for-elasticsearch/kibana-notebooks)" >> $GITHUB_ENV
           echo "es_version=$(release-tools/scripts/version-info.sh --es)" >> $GITHUB_ENV
           echo $es_version
-      - uses: actions/checkout@v2
+      - name: Checkout Kibana
+        uses: actions/checkout@v2
         with:
-          repository: opendistro-for-elasticsearch/kibana-notebooks
-          ref: ${{env.p_tag_kib_nb}}
-          path: kibana/plugins/kibana-nb
+          repository: opendistro-for-elasticsearch/kibana-oss
+          ref: ${{env.es_version}}
+          token: ${{ secrets.TOKEN }}
+          path: kibana
