@@ -24,6 +24,7 @@ jobs:
         run: |
           echo "p_tag_kib_nb=$(release-tools/scripts/plugin_tag.sh opendistro-for-elasticsearch/kibana-notebooks)" >> $GITHUB_ENV
           echo "es_version=$(./yq eval '.versions.ES.current' release-tools/scripts/manifest.yml )" >> $GITHUB_ENV
+          ./yq eval '.versions.ES.current' release-tools/scripts/manifest.yml
 
       - name: Show tags
         run: echo "$env:es_version"
