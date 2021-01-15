@@ -14,8 +14,11 @@ jobs:
       p_tag_kib_nb: $(release-tools/scripts/plugin_tag.sh opendistro-for-elasticsearch/kibana-notebooks)
     steps:
       - uses: actions/checkout@v1
+      - name: Get env
+        run: echo ${{env.es_version}}
 
   Test-Kibana-Notebooks-NoSec:
+    needs: Set-Env
     runs-on: windows-latest
     name: Test-Kibana-Notebooks-NoSec
     strategy:
