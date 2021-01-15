@@ -26,8 +26,7 @@ jobs:
           echo "es_version=$(release-tools/scripts/version-info.sh --es)" >> $GITHUB_ENV
 
       - name: Show tags
-        run: |
-          echo "${env:es_version}"
+        run: echo "$env:es_version"
       - name: Checkout Kibana
         uses: actions/checkout@v2
         with:
