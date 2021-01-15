@@ -9,11 +9,13 @@ jobs:
   Set-Env:
     runs-on: ubuntu-latest
     name: Set-Env
-    env:
-      es_version: $(release-tools/scripts/version-info.sh --es)
-      p_tag_kib_nb: $(release-tools/scripts/plugin_tag.sh opendistro-for-elasticsearch/kibana-notebooks)
     steps:
       - uses: actions/checkout@v1
+      - name: Required packages
+        run: release-tools/scripts/required_packages.sh
+      - name: Set env
+        env:
+          es_version: release-tools/scripts/version-info.sh --es
       - name: Get env
         run: echo ${{env.es_version}}
 
