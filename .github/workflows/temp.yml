@@ -8,6 +8,8 @@ on:
 jobs:
   Set-Env:
     runs-on: ubuntu-latest
+    env:
+      es_version: release-tools/scripts/version-info.sh --es
     name: Set-Env
     steps:
       - uses: actions/checkout@v1
@@ -16,8 +18,6 @@ jobs:
         run: |
           release-tools/scripts/required_packages.sh
           echo "es_version=$(release-tools/scripts/version-info.sh --es)" >> $GITHUB_ENV
-        env:
-          es_version: release-tools/scripts/version-info.sh --es
       - name: Get env
         run: echo ${{env.es_version}}
 
@@ -31,11 +31,11 @@ jobs:
         java: [14]
     steps:
       - uses: actions/checkout@v1
-
+      
       - name: Checkout Kibana
         uses: actions/checkout@v2
         with:
           repository: opendistro-for-elasticsearch/kibana-oss
-          ref: ${{job.Set-Env.step.req.env.es_version}}
+          ref: ${{job.Set-Env.env.es_version}}
           token: ${{ secrets.TOKEN }}
           path: kibana
