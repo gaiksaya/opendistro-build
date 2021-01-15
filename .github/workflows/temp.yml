@@ -6,6 +6,14 @@ on:
       - "test"
 
 jobs:
+  Set-Env:
+    runs-on: ubuntu-latest
+    name: Set-Env
+    env:
+      es_version: $(release-tools/scripts/version-info.sh --es)
+      p_tag_kib_nb: $(release-tools/scripts/plugin_tag.sh opendistro-for-elasticsearch/kibana-notebooks)
+    steps:
+      - uses: actions/checkout@v1
 
   Test-Kibana-Notebooks-NoSec:
     runs-on: windows-latest
@@ -17,22 +25,10 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
-      - name: Install yq
-        run: .github/workflows/wget.ps1
-
-      - name: Retrieve plugin tags
-        run: |
-          echo "p_tag_kib_nb=$(release-tools/scripts/plugin_tag.sh opendistro-for-elasticsearch/kibana-notebooks)" >> $GITHUB_ENV
-          echo "es_version=$(./yq eval '.versions.ES.current' release-tools/scripts/manifest.yml)" >> $GITHUB_ENV
-        env:
-          es_version: ./yq eval '.versions.ES.current' release-tools/scripts/manifest.yml
-
-      - name: Show tags
-        run: echo "$env:es_version"
       - name: Checkout Kibana
         uses: actions/checkout@v2
         with:
           repository: opendistro-for-elasticsearch/kibana-oss
-          ref: ${{env.es_version}}
+          ref: ${{job.Set-Env.env.es_version}}
           token: ${{ secrets.TOKEN }}
           path: kibana

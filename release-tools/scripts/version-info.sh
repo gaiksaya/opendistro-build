@@ -36,27 +36,27 @@ fi
 case $VERSION_TYPE in
 
   --es)
-    ./yq eval '.versions.ES.current' $MANIFEST_FILE
+    yq eval '.versions.ES.current' $MANIFEST_FILE
     ;;
 
   --es-prev)
-    ./yq eval '.versions.ES.previous' $MANIFEST_FILE
+    yq eval '.versions.ES.previous' $MANIFEST_FILE
     ;;
 
   --es-next)
-    ./yq eval '.versions.ES.next' $MANIFEST_FILE
+    yq eval '.versions.ES.next' $MANIFEST_FILE
     ;;
 
   --od)
-    ./yq eval '.versions.ODFE.current' $MANIFEST_FILE
+    yq eval '.versions.ODFE.current' $MANIFEST_FILE
     ;;
 
   --od-prev)
-    ./yq eval '.versions.ODFE.previous' $MANIFEST_FILE
+    yq eval '.versions.ODFE.previous' $MANIFEST_FILE
     ;;
 
   --od-next)
-    ./yq eval '.versions.ODFE.next' $MANIFEST_FILE
+    yq eval '.versions.ODFE.next' $MANIFEST_FILE
     ;;
 
   *)
