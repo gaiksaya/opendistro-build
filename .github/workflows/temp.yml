@@ -29,6 +29,6 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: opendistro-for-elasticsearch/kibana-oss
-          ref: ${{env.es_version}}
+          ref: ${{env:es_version}}
           token: ${{ secrets.TOKEN }}
           path: kibana
