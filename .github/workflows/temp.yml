@@ -21,9 +21,8 @@ jobs:
         run: .github/workflows/wget.ps1
 
       - name: Retrieve plugin tags
-        env:
-          yq: .\$pwd\yq.exe
         run: |
+          echo "yq=.\$pwd\yq.exe" >> $GITHUB_ENV
           pip install PyYaml
           echo "p_tag_kib_nb=$(release-tools/scripts/plugin_tag.sh opendistro-for-elasticsearch/kibana-notebooks)" >> $GITHUB_ENV
           echo "es_version=$(release-tools/scripts/version-info.sh --es)" >> $GITHUB_ENV
